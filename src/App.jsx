@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -50,9 +50,9 @@ const MapComponent = () => {
       mapInstanceRef.current
     );
 
-    // Update marker position on map click
+    // Update position state on map click
     mapInstanceRef.current.on("click", function (e) {
-      markerRef.current.setLatLng(e.latlng);
+      setPosition({ lat: e.latlng.lat, lng: e.latlng.lng });
     });
 
     // Clean up the map instance on component unmount
@@ -65,11 +65,11 @@ const MapComponent = () => {
   // Update map and marker position when `position` state changes
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 13);
+      mapInstanceRef.current.setView([position.lat, position.lng], 16);
       markerRef.current.setLatLng([position.lat, position.lng]);
     }
   }, [position]);
-
+  console.log(position);
   return (
     <div id="map" ref={mapRef} style={{ height: "500px", width: "100%" }}></div>
   );
