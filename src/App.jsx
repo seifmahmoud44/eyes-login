@@ -8,7 +8,6 @@ const MapComponent = () => {
   const markerRef = useRef(null);
   const [position, setPosition] = useState({ lat: 51.505, lng: -0.09 }); // Default position
 
-  // Fetch the user's location
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -30,46 +29,46 @@ const MapComponent = () => {
     }
   }, []);
 
-  // Initialize the map once
   useEffect(() => {
-    if (mapInstanceRef.current) return; // If map instance already exists, do nothing
+    if (mapInstanceRef.current) return;
 
-    // Initialize the map
     mapInstanceRef.current = L.map(mapRef.current).setView(
       [position.lat, position.lng],
       13
     );
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(mapInstanceRef.current);
+    // Satellite tile layer
+    const satelliteLayer = L.tileLayer(
+      "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+      {
+        maxZoom: 20,
+        subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        attribution:
+          'Map data &copy; <a href="https://www.google.com/maps">Google Maps</a>',
+      }
+    ).addTo(mapInstanceRef.current);
 
-    // Initialize the marker
     markerRef.current = L.marker([position.lat, position.lng]).addTo(
       mapInstanceRef.current
     );
 
-    // Update position state on map click
     mapInstanceRef.current.on("click", function (e) {
       setPosition({ lat: e.latlng.lat, lng: e.latlng.lng });
     });
 
-    // Clean up the map instance on component unmount
     return () => {
       mapInstanceRef.current.remove();
       mapInstanceRef.current = null;
     };
   }, []);
 
-  // Update map and marker position when `position` state changes
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 16);
+      mapInstanceRef.current.setView([position.lat, position.lng], 13);
       markerRef.current.setLatLng([position.lat, position.lng]);
     }
   }, [position]);
-  console.log(position);
+
   return (
     <div id="map" ref={mapRef} style={{ height: "500px", width: "100%" }}></div>
   );
