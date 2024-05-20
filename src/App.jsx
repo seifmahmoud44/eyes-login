@@ -35,19 +35,40 @@ const MapComponent = () => {
 
     mapInstanceRef.current = L.map(mapRef.current).setView(
       [position.lat, position.lng],
-      13
+
+      15
     );
 
     // Satellite tile layer
     const satelliteLayer = L.tileLayer(
       "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
       {
-        maxZoom: 20,
+        maxZoom: 15,
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
         attribution:
           'Map data &copy; <a href="https://www.google.com/maps">Google Maps</a>',
       }
-    ).addTo(mapInstanceRef.current);
+    );
+
+    // Street tile layer (default)
+    const streetLayer = L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }
+    );
+
+    // Add default layer to the map
+    streetLayer.addTo(mapInstanceRef.current);
+
+    // Add layer control to switch between satellite and street layers
+    L.control
+      .layers({
+        "Street View": streetLayer,
+        "Satellite View": satelliteLayer,
+      })
+      .addTo(mapInstanceRef.current);
 
     // Custom icon for marker
     const customIcon = L.icon({
@@ -69,14 +90,13 @@ const MapComponent = () => {
       mapInstanceRef.current = null;
     };
   }, []);
-
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 13);
+      mapInstanceRef.current.setView([position.lat, position.lng], 15);
       markerRef.current.setLatLng([position.lat, position.lng]);
     }
   }, [position]);
-
+  console.log(position);
   return (
     <div id="map" ref={mapRef} style={{ height: "500px", width: "100%" }}></div>
   );
