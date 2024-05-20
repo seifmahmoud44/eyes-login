@@ -64,7 +64,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 13);
+      mapInstanceRef.current.setView([position.lat, position.lng], 20);
       markerRef.current.setLatLng([position.lat, position.lng]);
     }
   }, [position]);
