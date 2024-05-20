@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import iconUrl from "./assets/pin.png"; // Import your custom pin image
 
 const MapComponent = () => {
   const mapRef = useRef(null);
@@ -48,9 +49,16 @@ const MapComponent = () => {
       }
     ).addTo(mapInstanceRef.current);
 
-    markerRef.current = L.marker([position.lat, position.lng]).addTo(
-      mapInstanceRef.current
-    );
+    // Custom icon for marker
+    const customIcon = L.icon({
+      iconUrl: iconUrl, // Path to your custom pin image
+      iconSize: [32, 32], // Size of the image
+      iconAnchor: [16, 32], // Position of the image relative to the marker's location
+    });
+
+    markerRef.current = L.marker([position.lat, position.lng], {
+      icon: customIcon,
+    }).addTo(mapInstanceRef.current);
 
     mapInstanceRef.current.on("click", function (e) {
       setPosition({ lat: e.latlng.lat, lng: e.latlng.lng });
@@ -64,7 +72,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 20);
+      mapInstanceRef.current.setView([position.lat, position.lng], 13);
       markerRef.current.setLatLng([position.lat, position.lng]);
     }
   }, [position]);
