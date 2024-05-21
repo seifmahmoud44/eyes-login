@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import iconUrl from "../assets/pin.png"; // Import your custom pin image
+import ChooseTypeModel from "./ChooseTypeModel";
 
 // eslint-disable-next-line react/prop-types
 const MapComponent = ({ setLocation, location }) => {
@@ -81,9 +82,26 @@ const MapComponent = ({ setLocation, location }) => {
       markerRef.current.setLatLng([position.lat, position.lng]);
     }
   }, [position]);
-  //   console.log(position);
+  const [showModel, setShowModel] = useState(false);
+  console.log(showModel);
   return (
-    <div id="map" ref={mapRef} style={{ height: "100vh", width: "100%" }}></div>
+    <div>
+      {showModel && <ChooseTypeModel />}
+      <div
+        id="map"
+        className="relative"
+        ref={mapRef}
+        style={{ height: "100vh", width: "100%" }}
+      ></div>
+      <div className="z-[1000] py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
+        <button
+          onClick={() => setShowModel(true)}
+          className="font-bold text-2xl w-[200px] px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
+        >
+          تاكيد
+        </button>
+      </div>
+    </div>
   );
 };
 
