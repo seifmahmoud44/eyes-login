@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import FileUpload from "./FileUpload";
+import CameraCapture from "./CameraCapture";
 const Form = ({ supervisor, service }) => {
   const {
     register,
@@ -61,6 +63,8 @@ const Form = ({ supervisor, service }) => {
 
         <button type="submit">Submit</button>
       </form>
+      <FileUpload />
+      <CameraCapture />
     </div>
   );
 };
