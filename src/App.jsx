@@ -35,7 +35,7 @@ const App = () => {
 
   return (
     <div className="overflow-hidden">
-      {!clearIntro && (
+      {/* {!clearIntro && (
         <div className="intro relative z-20">
           <Intro />
         </div>
@@ -44,6 +44,16 @@ const App = () => {
         <CheckLocation />
       ) : (
         clearIntro && <Map location={location} setLocation={setLocation} />
+      )} */}
+      {!clearIntro && (
+        <div className="intro relative z-20">
+          <Intro />
+        </div>
+      )}
+      {checkLocation ? (
+        clearIntro && <Map location={location} setLocation={setLocation} />
+      ) : (
+        <CheckLocation />
       )}
     </div>
   );
