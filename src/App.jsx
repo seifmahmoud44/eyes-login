@@ -15,24 +15,22 @@ const App = () => {
 
   useEffect(() => {
     const loadHandler = () => {
-      setTimeout(() => {
-        gsap.to(".intro", {
-          y: "-100%",
-          ease: "power2.in",
-          onComplete: () => {
-            setClearIntro(true);
-          },
-        });
-      }, 2000);
+      gsap.to(".intro", {
+        y: "-100%",
+        ease: "power2.in",
+        delay: 2, // Delay of 2 seconds
+        onComplete: () => {
+          setClearIntro(true);
+        },
+      });
     };
-
-    window.addEventListener("load", loadHandler);
+    loadHandler();
 
     return () => {
       window.removeEventListener("load", loadHandler);
     };
   }, []);
-
+  console.log(clearIntro);
   return (
     <div className="overflow-hidden">
       {/* {!clearIntro && (
