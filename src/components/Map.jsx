@@ -83,10 +83,10 @@ const MapComponent = ({ setLocation, location }) => {
     }
   }, [position]);
   const [showModel, setShowModel] = useState(false);
-  console.log(showModel);
+
   return (
     <div>
-      {showModel && <ChooseTypeModel />}
+      {showModel && <ChooseTypeModel setShowModel={setShowModel} />}
       <div
         id="map"
         className="relative"

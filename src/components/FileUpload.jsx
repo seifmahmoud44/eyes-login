@@ -1,123 +1,71 @@
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { useRef } from "react";
+import upLoadingImg from "../assets/up-loading.png";
+import { toast } from "sonner";
 
-const FileUpload = () => {
-  const [error, setError] = useState("");
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState("");
-  const onDrop = useCallback((acceptedFiles) => {
-    setError("");
-    const file = acceptedFiles[0];
+const FileUpload = ({ setUploadFile, setErr }) => {
+  const fileInputRef = useRef(null);
 
-    if (file.type.startsWith("video/")) {
-      const video = document.createElement("video");
-      video.preload = "metadata";
-
-      video.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(video.src);
-
-        if (video.duration > 60) {
-          // 60 seconds = 1 minute
-          setError("Video is too long. Maximum duration is 1 minute.");
-        } else {
-          setFile(file);
-          setPreview(URL.createObjectURL(file));
-        }
-      };
-
-      video.src = URL.createObjectURL(file);
+  const handleIconClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     } else {
-      setFile(file);
-      setPreview(URL.createObjectURL(file));
+      console.error("fileInputRef is not set");
     }
-  }, []);
+  };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: "image/*,video/*",
-    multiple: false,
-  });
+  const handleFileChange = (event) => {
+    setErr("");
+    const file = event.target.files[0];
 
-  const handleSubmit = async () => {
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+      if (file.type.startsWith("video/")) {
+        const video = document.createElement("video");
+        video.preload = "metadata";
 
-      try {
-        const response = await fetch("YOUR_API_ENDPOINT", {
-          method: "POST",
-          body: formData,
-        });
+        video.onloadedmetadata = () => {
+          window.URL.revokeObjectURL(video.src);
 
-        if (response.ok) {
-          alert("File uploaded successfully");
-        } else {
-          alert("Failed to upload file");
-        }
-      } catch (error) {
-        console.error("Error uploading file:", error);
+          if (video.duration > 60) {
+            // 60 seconds = 1 minute
+
+            toast.error("لا يمكن رفع فيديو اكبر من دقيقة");
+          } else {
+            setUploadFile(file);
+          }
+        };
+
+        video.src = URL.createObjectURL(file);
+      } else {
+        setUploadFile(file);
       }
-    } else {
-      alert("No file to upload");
     }
   };
 
   return (
     <div>
-      <div {...getRootProps()} style={styles.dropzone}>
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the files here ...</p>
-        ) : (
-          <p>
-            Drag drop an image or video here, or click to select a file (Max
-            duration for videos: 1 minute)
-          </p>
-        )}
-        {error && <p style={styles.error}>{error}</p>}
+      <div
+        className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
+        onClick={handleIconClick}
+      >
+        <img src={upLoadingImg} alt="Upload Icon" className="w-6 " />
       </div>
-      {preview && (
-        <div style={styles.preview}>
-          {file.type.startsWith("image/") ? (
-            <img src={preview} alt="Preview" style={styles.previewImage} />
-          ) : (
-            <video src={preview} controls style={styles.previewVideo} />
-          )}
-        </div>
-      )}
-      <button onClick={handleSubmit} style={styles.uploadButton}>
-        Upload
-      </button>
+      <input
+        type="file"
+        accept="image/*,video/*"
+        ref={fileInputRef}
+        style={styles.fileInput}
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
 
 const styles = {
-  dropzone: {
-    border: "2px dashed #cccccc",
-    borderRadius: "4px",
-    padding: "20px",
-    textAlign: "center",
-    cursor: "pointer",
+  fileInput: {
+    display: "none",
   },
   error: {
     color: "red",
-  },
-  preview: {
-    marginTop: "20px",
-  },
-  previewImage: {
-    width: "100px",
-    height: "auto",
-  },
-  previewVideo: {
-    width: "100px",
-    height: "auto",
-  },
-  uploadButton: {
-    marginTop: "20px",
-    padding: "10px 20px",
-    cursor: "pointer",
   },
 };
 

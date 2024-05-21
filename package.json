@@ -20,7 +20,8 @@
     "react-hook-form": "^7.51.4",
     "react-router-dom": "^6.23.1",
     "react-spinners": "^0.13.8",
-    "react-webcam": "^7.2.0"
+    "react-webcam": "^7.2.0",
+    "sonner": "^1.4.41"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

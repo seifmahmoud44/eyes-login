@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Webcam from "react-webcam";
-
-const CameraCapture = () => {
+import closeImg from "../assets/close.png";
+const CameraCapture = ({ setUploadFile, setCamModel }) => {
   const [capturedMedia, setCapturedMedia] = useState(null);
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -19,7 +19,9 @@ const CameraCapture = () => {
     const blob = new Blob([byteArray], { type: "image/jpeg" });
     const file = new File([blob], "capture.jpg", { type: "image/jpeg" });
     setCapturedMedia(file);
-    console.log("Captured Image:", file);
+
+    setUploadFile(file);
+    setCamModel(false);
   };
 
   const startRecording = () => {
@@ -38,7 +40,9 @@ const CameraCapture = () => {
       const blob = new Blob(chunks, { type: "video/webm" });
       const file = new File([blob], "capture.webm", { type: "video/webm" });
       setCapturedMedia(file);
-      console.log("Captured Video:", file);
+      // console.log("Captured Video:", file);
+      setUploadFile(file);
+      setCamModel(false);
     };
 
     mediaRecorderRef.current.start();
@@ -50,19 +54,32 @@ const CameraCapture = () => {
   };
 
   return (
-    <div>
-      <div style={styles.cameraContainer}>
-        <Webcam audio={true} ref={webcamRef} style={styles.video} />
+    <div className="h-full w-full bg-black relative">
+      <div
+        onClick={() => setCamModel(false)}
+        className="p-2 cursor-pointer rounded bg-[#1A6537] absolute top-1 left-1 w-6 z-[1002] flex justify-center items-center "
+      >
+        <img src={closeImg} alt="" className="" />
       </div>
-      <div style={styles.controls}>
-        <button onClick={captureImage} style={styles.button}>
-          Capture Image
+      <div style={styles.cameraContainer} className="w-full h-full">
+        <Webcam
+          className="w-full h-full"
+          ref={webcamRef}
+          style={styles.video}
+        />
+      </div>
+      <div className="absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10">
+        <button
+          className=" text-nowrap  text-2xl w-[200px] mb-4 px-3 py-1 bg-[#1A6537] text-white rounded"
+          onClick={captureImage}
+        >
+          التقط صورة
         </button>
         <button
+          className=" text-nowrap  text-2xl w-[200px] mb-4 px-3 py-1 bg-[#1A6537] text-white rounded"
           onClick={isRecording ? stopRecording : startRecording}
-          style={styles.button}
         >
-          {isRecording ? "Stop Recording" : "Start Recording"}
+          {isRecording ? "وقف التسجيل" : "بدا التسجيل"}
         </button>
       </div>
     </div>
@@ -79,17 +96,7 @@ const styles = {
   },
   video: {
     width: "100%",
-    height: "auto",
-  },
-  controls: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "10px",
-  },
-  button: {
-    margin: "0 10px",
-    padding: "10px 20px",
-    cursor: "pointer",
+    height: "100%",
   },
 };
 
