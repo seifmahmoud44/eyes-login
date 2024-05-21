@@ -85,13 +85,13 @@ const MapComponent = ({ setLocation, location }) => {
   const [showModel, setShowModel] = useState(false);
 
   return (
-    <div>
+    <div className="h-screen w-screen">
       {showModel && <ChooseTypeModel setShowModel={setShowModel} />}
       <div
         id="map"
         className="relative"
         ref={mapRef}
-        style={{ height: "100vh", width: "100%" }}
+        style={{ height: "100%", width: "100%" }}
       ></div>
       <div className="z-[1000] py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
         <button
