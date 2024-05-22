@@ -32,29 +32,41 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
     setIsRecording(true);
 
     const stream = webcamRef.current.stream;
-    const options = { mimeType: "video/webm" };
-    mediaRecorderRef.current = new MediaRecorder(stream, options);
+    let options = { mimeType: "video/webm; codecs=vp8" }; // Adjust mimeType for better compatibility
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      options = { mimeType: "video/webm" }; // Fallback option
+    }
 
-    const chunks = [];
-    mediaRecorderRef.current.ondataavailable = (event) => {
-      chunks.push(event.data);
-    };
+    try {
+      mediaRecorderRef.current = new MediaRecorder(stream, options);
 
-    mediaRecorderRef.current.onstop = () => {
-      const blob = new Blob(chunks, { type: "video/webm" });
-      const file = new File([blob], "capture.webm", { type: "video/webm" });
-      setCapturedMedia(file);
-      // console.log("Captured Video:", file);
-      setUploadFile(file);
-      setCamModel(false);
-    };
+      const chunks = [];
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        chunks.push(event.data);
+      };
 
-    mediaRecorderRef.current.start();
+      mediaRecorderRef.current.onstop = () => {
+        const blob = new Blob(chunks, { type: "video/webm" });
+        const file = new File([blob], "capture.webm", { type: "video/webm" });
+        setCapturedMedia(file);
+        setUploadFile(file);
+        setCamModel(false);
+      };
+
+      mediaRecorderRef.current.start(100); // Request data every 100ms for smoother recording on mobile
+    } catch (e) {
+      console.error("MediaRecorder initialization failed:", e);
+    }
   };
 
   const stopRecording = () => {
     setIsRecording(false);
-    mediaRecorderRef.current.stop();
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
+      mediaRecorderRef.current.stop();
+    }
   };
 
   return (
@@ -75,7 +87,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
       <div className="mb-3 absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10">
         <div
           onClick={captureImage}
-          className="bg-[#1A6537] p-3  flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
+          className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
         >
           <img className="w-6" src={capture} alt="" />
         </div>
