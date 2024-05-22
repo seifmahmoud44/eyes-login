@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import closeImg from "../assets/close.png";
 // eslint-disable-next-line react/prop-types
-const ChooseTypeModel = ({ setShowModel }) => {
+const ChooseTypeModel = ({ setShowModel, position }) => {
   useEffect(() => {
     gsap.fromTo(".model", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1 });
   }, []);
@@ -20,12 +20,15 @@ const ChooseTypeModel = ({ setShowModel }) => {
         </div>
 
         <button
-          onClick={() => navigate("/supervisor")}
+          onClick={() => navigate("/request/0", { state: { position } })}
           className="font-bold text-lg text-nowrap w-fit px-6 py-3 bg-[#1A6537] text-white rounded"
         >
           بلاغات المراقب الميداني
         </button>
-        <button className="font-bold text-lg text-nowrap w-fit px-6 py-3 bg-[#1A6537] text-white rounded">
+        <button
+          onClick={() => navigate("/request/1", { state: { position } })}
+          className="font-bold text-lg text-nowrap w-fit px-6 py-3 bg-[#1A6537] text-white rounded"
+        >
           بلاغات مقدمي الخدمة
         </button>
       </div>

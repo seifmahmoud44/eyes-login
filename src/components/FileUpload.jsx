@@ -2,7 +2,7 @@ import { useRef } from "react";
 import upLoadingImg from "../assets/up-loading.png";
 import { toast } from "sonner";
 
-const FileUpload = ({ setUploadFile, setErr }) => {
+const FileUpload = ({ setUploadFile }) => {
   const fileInputRef = useRef(null);
 
   const handleIconClick = () => {
@@ -14,7 +14,6 @@ const FileUpload = ({ setUploadFile, setErr }) => {
   };
 
   const handleFileChange = (event) => {
-    setErr("");
     const file = event.target.files[0];
 
     if (file) {

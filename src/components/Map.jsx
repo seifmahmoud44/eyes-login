@@ -86,17 +86,19 @@ const MapComponent = ({ setLocation, location }) => {
 
   return (
     <div className="h-screen w-screen">
-      {showModel && <ChooseTypeModel setShowModel={setShowModel} />}
+      {showModel && (
+        <ChooseTypeModel setShowModel={setShowModel} position={position} />
+      )}
       <div
         id="map"
         className="relative"
         ref={mapRef}
         style={{ height: "100%", width: "100%" }}
       ></div>
-      <div className="z-[1000] py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
+      <div className="z-[1000]  py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
         <button
           onClick={() => setShowModel(true)}
-          className="font-bold text-2xl w-[200px] px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
+          className="font-bold text-2xl  max-w-full px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
         >
           تاكيد
         </button>

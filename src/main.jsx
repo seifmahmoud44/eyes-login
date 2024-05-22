@@ -5,6 +5,7 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DashboardReview from "./pages/DashboardReview.jsx";
 import Form from "./components/Form.jsx";
+import Sucsess from "./pages/Sucsess.jsx";
 
 const router = createBrowserRouter([
   {
@@ -12,12 +13,16 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/supervisor",
+    path: "/request/:type",
     element: <Form />,
   },
   {
     path: "/dashboard",
     element: <DashboardReview />,
+  },
+  {
+    path: "/sucsess",
+    element: <Sucsess />,
   },
 ]);
 

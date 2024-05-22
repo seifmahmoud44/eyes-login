@@ -1,6 +1,10 @@
 import { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import closeImg from "../assets/close.png";
+import rec from "../assets/rec-button.png";
+import recording from "../assets/record.png";
+import capture from "../assets/capture.png";
+
 const CameraCapture = ({ setUploadFile, setCamModel }) => {
   const [capturedMedia, setCapturedMedia] = useState(null);
   const webcamRef = useRef(null);
@@ -68,19 +72,25 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
           style={styles.video}
         />
       </div>
-      <div className="absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10">
-        <button
-          className=" text-nowrap  text-2xl w-[200px] mb-4 px-3 py-1 bg-[#1A6537] text-white rounded"
-          onClick={captureImage}
-        >
-          التقط صورة
-        </button>
-        <button
-          className=" text-nowrap  text-2xl w-[200px] mb-4 px-3 py-1 bg-[#1A6537] text-white rounded"
-          onClick={isRecording ? stopRecording : startRecording}
-        >
-          {isRecording ? "وقف التسجيل" : "بدا التسجيل"}
-        </button>
+      <div className="mb-3 absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10">
+        {!isRecording && (
+          <div
+            onClick={captureImage}
+            className="bg-[#1A6537] p-3  flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
+          >
+            <img className="w-6" src={capture} alt="" />
+          </div>
+        )}
+
+        <div onClick={isRecording ? stopRecording : startRecording}>
+          {isRecording ? (
+            <div className="container">
+              <div className="recording-circle"></div>
+            </div>
+          ) : (
+            <img src={rec} alt="" className="w-12 cursor-pointer" />
+          )}
+        </div>
       </div>
     </div>
   );

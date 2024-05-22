@@ -2,30 +2,43 @@ import { useForm } from "react-hook-form";
 import FileUpload from "./FileUpload";
 import CameraCapture from "./CameraCapture";
 import captureImg from "../assets/capture.png";
-
 import closeImg from "../assets/close.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
+import { useLocation, useParams } from "react-router-dom";
+import useAxiosPost from "../hooks/useAxiosPost";
+import { BeatLoader } from "react-spinners";
 
 const Form = () => {
   const [uploadFile, setUploadFile] = useState("");
   const [camModel, setCamModel] = useState(false);
+  const { state } = useLocation();
+  const { type } = useParams();
+  const { response, loading, error, sendData } = useAxiosPost();
 
-  const [err, setErr] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
     if (!uploadFile) {
       toast.error("يجب رفع فيديو او صورة");
-    } else {
-      const finalData = { ...data, file_link: uploadFile };
-      console.log(finalData);
+      return;
     }
+    const finalData = {
+      ...data,
+      file_link: uploadFile,
+      type_report: type,
+      location_map: state.position,
+    };
+    sendData(
+      "https://api-eyes.disgin.website/backend/create/reporter.php?api=311958357932035780279254406072",
+      finalData
+    );
   };
-  //   console.log(uploadFile);
+
   return (
     <div className="flex justify-center items-center">
       <Toaster richColors position="bottom-center" />
@@ -56,8 +69,7 @@ const Form = () => {
           </div>
         ) : (
           <div className="flex justify-center items-center gap-6">
-            <FileUpload setUploadFile={setUploadFile} setErr={setErr} />
-
+            <FileUpload setUploadFile={setUploadFile} />
             <div
               onClick={() => setCamModel(true)}
               className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
@@ -68,88 +80,94 @@ const Form = () => {
         )}
 
         <div className="w-full">
-          <label className="block" htmlFor="field1">
-            اسم المراقب:
-          </label>
-          <input
-            className=" w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-            type="text"
-            {...register("field1", { required: true })}
-          />
-          {errors.field1 && <span className="text-red-500">مطلوب</span>}
-        </div>
-
-        <div className="w-full">
-          <label className="block" htmlFor="field2">
-            الادارة التابعة لها:
+          <label className="block" htmlFor="user_name">
+            {type === "0" ? "اسم المراقب:" : " اسم مقدم البلاغ:"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="text"
-            {...register("field2", { required: true })}
+            {...register("user_name", { required: true })}
           />
-          {errors.field2 && <span className="text-red-500">مطلوب</span>}
+          {errors.user_name && <span className="text-red-500">مطلوب</span>}
         </div>
 
         <div className="w-full">
-          <label className="block" htmlFor="field3">
+          <label className="block" htmlFor="user_management">
+            {type === "0" ? "الادارة التابعة لها:" : "مكتب تقديم الخدمة :"}
+          </label>
+          <input
+            className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+            type="text"
+            {...register("user_management", { required: true })}
+          />
+          {errors.user_management && (
+            <span className="text-red-500">مطلوب</span>
+          )}
+        </div>
+
+        <div className="w-full">
+          <label className="block" htmlFor="registration_number">
             رقم الشاخص:
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="text"
-            {...register("field3", { required: true })}
+            {...register("registration_number", { required: true })}
           />
-          {errors.field3 && <span className="text-red-500">مطلوب</span>}
+          {errors.registration_number && (
+            <span className="text-red-500">مطلوب</span>
+          )}
         </div>
 
         <div className="w-full">
           <label className="block" htmlFor="category">
             تصنيف البلاغ:
           </label>
-
           <select
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             {...register("category", { required: true })}
           >
             <option value=""></option>
-            <option value="البنية التحتية">البنية التحتية</option>
-            <option value="الجاهزية">الجاهزية</option>
-            <option value="1">الاعاشة</option>
-            <option value="التشغيل والصيانة">التشغيل والصيانة</option>
-            <option value="اخري">اخري</option>
+            <option value="0">البنية التحتية</option>
+            <option value="1">الجاهزية</option>
+            <option value="2">الاعاشة</option>
+            <option value="3">التشغيل والصيانة</option>
+            <option value="4">اخري</option>
           </select>
           {errors.category && <span className="text-red-500">مطلوب</span>}
         </div>
 
         <div className="w-full">
-          <label className="block" htmlFor="description">
+          <label className="block" htmlFor="report_description">
             وصف البلاغ:
           </label>
           <textarea
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-            {...register("description", { required: true })}
+            {...register("report_description", { required: true })}
           ></textarea>
-          {errors.description && <span className="text-red-500">مطلوب</span>}
+          {errors.report_description && (
+            <span className="text-red-500">مطلوب</span>
+          )}
         </div>
 
         <div className="w-full">
-          <label className="block" htmlFor="extraField">
+          <label className="block" htmlFor="contact_number">
             رقم التواصل:
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="number"
-            {...register("extraField", { required: true })}
+            {...register("contact_number", { required: true })}
           />
-          {errors.extraField && <span className="text-red-500">مطلوب</span>}
+          {errors.contact_number && <span className="text-red-500">مطلوب</span>}
         </div>
 
         <button
+          disabled={loading}
           type="submit"
-          className="bg-[#1A6537] px-4 py-2 text-white flex justify-center items-center rounded cursor-pointer "
+          className="bg-[#1A6537] px-4 py-2 text-white flex justify-center items-center rounded cursor-pointer"
         >
-          Submit
+          {loading ? <BeatLoader color="#fff" /> : "ارسال"}
         </button>
       </form>
     </div>
