@@ -22,7 +22,13 @@ const CheckLocation = () => {
   return (
     <div className="absolute top-0 left-0 w-screen h-screen bg-black bg-opacity-10 flex flex-col justify-center items-center gap-6">
       <img src={location} alt="" className="w-[100px]" />
-      <h1 className="font-bold text-2xl">نرجو تشغيل خدمات الموقع</h1>
+      <h1 className="font-bold text-2xl">نرجو تشغيل خدمات الموقع ثم </h1>
+      <button
+        onClick={() => document.location.reload()}
+        className="bg-[#1A6537] px-4 py-2 text-white flex justify-center items-center rounded cursor-pointer"
+      >
+        اعادة تحميل الصفحة
+      </button>
     </div>
   );
 };

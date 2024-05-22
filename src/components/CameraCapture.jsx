@@ -73,24 +73,23 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
         />
       </div>
       <div className="mb-3 absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10">
-        {!isRecording && (
-          <div
-            onClick={captureImage}
-            className="bg-[#1A6537] p-3  flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
-          >
-            <img className="w-6" src={capture} alt="" />
-          </div>
-        )}
-
-        <div onClick={isRecording ? stopRecording : startRecording}>
-          {isRecording ? (
-            <div className="container">
-              <div className="recording-circle"></div>
-            </div>
-          ) : (
-            <img src={rec} alt="" className="w-12 cursor-pointer" />
-          )}
+        <div
+          onClick={captureImage}
+          className="bg-[#1A6537] p-3  flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
+        >
+          <img className="w-6" src={capture} alt="" />
         </div>
+
+        <div onClick={stopRecording} className="container">
+          <div className="recording-circle"></div>
+        </div>
+
+        <img
+          onClick={startRecording}
+          src={rec}
+          alt=""
+          className="w-12 cursor-pointer"
+        />
       </div>
     </div>
   );
