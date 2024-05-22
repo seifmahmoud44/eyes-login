@@ -38,17 +38,28 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
     setCamModel(false);
   };
 
-  const startRecording = () => {
+  const startRecording = async () => {
     setIsRecording(true);
 
     const stream = webcamRef.current.stream;
-    let options = { mimeType: "video/webm; codecs=vp8" }; // Adjust mimeType for better compatibility
+    const audioStream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+    }); // Get audio stream
+
+    const mediaStream = new MediaStream(); // Create a new media stream
+    [stream, audioStream].forEach((s) => {
+      s.getTracks().forEach((t) => {
+        mediaStream.addTrack(t); // Add video and audio tracks to the new media stream
+      });
+    });
+
+    let options = { mimeType: "video/webm; codecs=vp8" };
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      options = { mimeType: "video/webm" }; // Fallback option
+      options = { mimeType: "video/webm" };
     }
 
     try {
-      mediaRecorderRef.current = new MediaRecorder(stream, options);
+      mediaRecorderRef.current = new MediaRecorder(mediaStream, options);
 
       const chunks = [];
       mediaRecorderRef.current.ondataavailable = (event) => {
@@ -95,7 +106,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
       </div>
       <div style={styles.cameraContainer} className="w-full h-full">
         <Webcam
-          audio={true} // Enable audio
+          audio={false} // Don't capture audio directly through Webcam component
           className="w-full h-full"
           ref={webcamRef}
           videoConstraints={{ facingMode }}
