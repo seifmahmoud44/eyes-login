@@ -3,12 +3,13 @@ import FileUpload from "./FileUpload";
 import CameraCapture from "./CameraCapture";
 import captureImg from "../assets/capture.png";
 import closeImg from "../assets/close.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import { useLocation, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
 import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const Form = () => {
   const [uploadFile, setUploadFile] = useState("");
@@ -130,11 +131,11 @@ const Form = () => {
             {...register("category", { required: true })}
           >
             <option value=""></option>
-            <option value="0">البنية التحتية</option>
-            <option value="1">الجاهزية</option>
-            <option value="2">الاعاشة</option>
-            <option value="3">التشغيل والصيانة</option>
-            <option value="4">اخري</option>
+            <option value="1">البنية التحتية</option>
+            <option value="2">الجاهزية</option>
+            <option value="3">الاعاشة</option>
+            <option value="4">التشغيل والصيانة</option>
+            <option value="5">اخري</option>
           </select>
           {errors.category && <span className="text-red-500">مطلوب</span>}
         </div>
@@ -156,44 +157,9 @@ const Form = () => {
           <label className="block" htmlFor="contact_number">
             رقم التواصل:
           </label>
-          <PhoneInput
-            country={"sa"}
-            onlyCountries={["sa"]}
-            localization={{
-              ar: "السعودية",
-            }}
-            inputProps={{
-              name: "contact_number",
-              required: true,
-            }}
-            containerStyle={{
-              width: "100%",
-              position: "relative",
-              zIndex: 0, // Ensure the container is relative for absolute positioning
-            }}
-            inputStyle={{
-              width: "calc(100%)", // Adjust the width to make space for the country code
-              border: "1px solid black",
-              outline: "none",
-              padding: "8px",
-              paddingLeft: "45px", // Add padding to accommodate the country code
-              borderRadius: "4px",
-              position: "relative",
-              zIndex: 1,
-            }}
-            buttonStyle={{
-              position: "absolute",
-              top: "50%",
-              left: "10px", // Adjust the position of the country code to the left
-              transform: "translateY(-50%)", // Center vertically
-              backgroundColor: "#f1f1f1",
-              color: "#000",
-              padding: "8px",
-              borderRadius: "4px",
-              border: "none",
-              zIndex: 1,
-            }}
-            // You can add additional props as needed
+          <input
+            className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+            type="number"
             {...register("contact_number", { required: true })}
           />
           {errors.contact_number && <span className="text-red-500">مطلوب</span>}
