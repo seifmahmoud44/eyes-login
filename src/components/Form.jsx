@@ -8,6 +8,7 @@ import { Toaster, toast } from "sonner";
 import { useLocation, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
+import PhoneInput from "react-phone-input-2";
 
 const Form = () => {
   const [uploadFile, setUploadFile] = useState("");
@@ -33,6 +34,7 @@ const Form = () => {
       type_report: type,
       location_map: state.position,
     };
+    console.log(finalData);
     sendData(
       "https://api-eyes.disgin.website/backend/create/reporter.php?api=311958357932035780279254406072",
       finalData
@@ -43,7 +45,7 @@ const Form = () => {
     <div className="flex justify-center items-center">
       <Toaster richColors position="bottom-center" />
       {camModel && (
-        <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-0 left-0 w-full h-full z-[2000]">
           <CameraCapture
             setUploadFile={setUploadFile}
             setCamModel={setCamModel}
@@ -154,9 +156,44 @@ const Form = () => {
           <label className="block" htmlFor="contact_number">
             رقم التواصل:
           </label>
-          <input
-            className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-            type="number"
+          <PhoneInput
+            country={"sa"}
+            onlyCountries={["sa"]}
+            localization={{
+              ar: "السعودية",
+            }}
+            inputProps={{
+              name: "contact_number",
+              required: true,
+            }}
+            containerStyle={{
+              width: "100%",
+              position: "relative",
+              zIndex: 0, // Ensure the container is relative for absolute positioning
+            }}
+            inputStyle={{
+              width: "calc(100%)", // Adjust the width to make space for the country code
+              border: "1px solid black",
+              outline: "none",
+              padding: "8px",
+              paddingLeft: "45px", // Add padding to accommodate the country code
+              borderRadius: "4px",
+              position: "relative",
+              zIndex: 1,
+            }}
+            buttonStyle={{
+              position: "absolute",
+              top: "50%",
+              left: "10px", // Adjust the position of the country code to the left
+              transform: "translateY(-50%)", // Center vertically
+              backgroundColor: "#f1f1f1",
+              color: "#000",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "none",
+              zIndex: 1,
+            }}
+            // You can add additional props as needed
             {...register("contact_number", { required: true })}
           />
           {errors.contact_number && <span className="text-red-500">مطلوب</span>}
