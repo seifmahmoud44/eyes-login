@@ -95,6 +95,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
       </div>
       <div style={styles.cameraContainer} className="w-full h-full">
         <Webcam
+          audio={true} // Enable audio
           className="w-full h-full"
           ref={webcamRef}
           videoConstraints={{ facingMode }}
