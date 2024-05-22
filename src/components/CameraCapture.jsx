@@ -99,8 +99,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
         />
       </div>
       <div className="mb-3 absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10 w-full justify-center">
-        {console.log(isRecording)}
-        {!isRecording && (
+        {!isRecording && isMobile && (
           <div
             onClick={flipCamera}
             className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
@@ -123,7 +122,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
           </div>
         )}
 
-        {!isRecording && isMobile && (
+        {!isRecording && (
           <img
             onClick={startRecording}
             src={rec}
