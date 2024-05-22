@@ -20,6 +20,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
   useEffect(() => {
     setIsMobile(isMobileDevice());
   }, []);
+
   const captureImage = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     const base64Data = imageSrc.split(",")[1];
@@ -77,6 +78,7 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
       mediaRecorderRef.current.stop();
     }
   };
+
   const flipCamera = () => {
     setFacingMode((prevFacingMode) =>
       prevFacingMode === "user" ? "environment" : "user"
@@ -95,6 +97,8 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
         <Webcam
           className="w-full h-full"
           ref={webcamRef}
+          videoConstraints={{ facingMode }}
+          screenshotFormat="image/jpeg"
           style={styles.video}
         />
       </div>
