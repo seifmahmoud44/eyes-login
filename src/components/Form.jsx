@@ -84,7 +84,7 @@ const Form = () => {
 
         <div className="w-full">
           <label className="block" htmlFor="user_name">
-            {type === "0" ? "اسم المراقب:" : " اسم مقدم البلاغ:"}
+            {type === "1" ? "اسم المراقب:" : " اسم مقدم البلاغ:"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
@@ -96,7 +96,7 @@ const Form = () => {
 
         <div className="w-full">
           <label className="block" htmlFor="user_management">
-            {type === "0" ? "الادارة التابعة لها:" : "مكتب تقديم الخدمة :"}
+            {type === "1" ? "الادارة التابعة لها:" : "مكتب تقديم الخدمة :"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
