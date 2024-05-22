@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import closeImg from "../assets/close.png";
 import rec from "../assets/rec-button.png";
-import recording from "../assets/record.png";
+import flipImg from "../assets/flip.png";
 import capture from "../assets/capture.png";
 
 const CameraCapture = ({ setUploadFile, setCamModel }) => {
@@ -10,7 +10,16 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [facingMode, setFacingMode] = useState("user");
 
+  const [isMobile, setIsMobile] = useState(false);
+  const isMobileDevice = () => {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  };
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
   const captureImage = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     const base64Data = imageSrc.split(",")[1];
@@ -68,6 +77,11 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
       mediaRecorderRef.current.stop();
     }
   };
+  const flipCamera = () => {
+    setFacingMode((prevFacingMode) =>
+      prevFacingMode === "user" ? "environment" : "user"
+    );
+  };
 
   return (
     <div className="h-full w-full bg-black relative">
@@ -84,24 +98,39 @@ const CameraCapture = ({ setUploadFile, setCamModel }) => {
           style={styles.video}
         />
       </div>
-      <div className="mb-3 absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10">
-        <div
-          onClick={captureImage}
-          className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
-        >
-          <img className="w-6" src={capture} alt="" />
-        </div>
+      <div className="mb-3 absolute left-1/2 bottom-0 -translate-x-1/2 flex gap-10 w-full justify-center">
+        {console.log(isRecording)}
+        {!isRecording && (
+          <div
+            onClick={flipCamera}
+            className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
+          >
+            <img className="w-6" src={flipImg} alt="Flip Camera" />
+          </div>
+        )}
+        {!isRecording && (
+          <div
+            onClick={captureImage}
+            className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all relative z-10"
+          >
+            <img className="w-6" src={capture} alt="" />
+          </div>
+        )}
 
-        <div onClick={stopRecording} className="container">
-          <div className="recording-circle"></div>
-        </div>
+        {isRecording && (
+          <div onClick={stopRecording} className="container">
+            <div className="recording-circle"></div>
+          </div>
+        )}
 
-        <img
-          onClick={startRecording}
-          src={rec}
-          alt=""
-          className="w-12 cursor-pointer"
-        />
+        {!isRecording && isMobile && (
+          <img
+            onClick={startRecording}
+            src={rec}
+            alt=""
+            className="w-12 cursor-pointer"
+          />
+        )}
       </div>
     </div>
   );
