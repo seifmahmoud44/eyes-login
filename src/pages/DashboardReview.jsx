@@ -3,11 +3,12 @@ import DashboardMap from "../components/DashboardMap";
 import DashTable from "../components/DashTable";
 
 const DashboardReview = () => {
-  const [location, setLocation] = useState({
-    lat: 21.4146051,
-    lng: 39.894564,
+  const [location, setLocation] = useState();
+
+  const [stats, setStats] = useState({
+    total_items1: "",
+    total_items2: "",
   });
-  const [stats, setStats] = useState("");
   return (
     <div className="grid grid-con grid-cols-2 grid-rows-3 h-screen gap-2 bg-slate-300">
       {/* map */}
@@ -22,12 +23,16 @@ const DashboardReview = () => {
         </h1>
         <div className="flex justify-center items-center h-full  gap-2">
           <div className="text-center flex flex-col justify-center items-center w-full  h-full bg-white space-y-4 py-4">
-            <h3 className="font-bold text-lg">مجموع بلاغات الرفع الميداني</h3>
-            <p className="font-bold text-4xl">{stats ? stats : "-"}</p>
+            <h3 className="font-bold text-lg">مجموع بلاغات المراقب الميداني</h3>
+            <p className="font-bold text-4xl">
+              {stats.total_items1 ? stats.total_items1 : "0"}
+            </p>
           </div>
           <div className="text-center flex flex-col justify-center items-center w-full h-full  space-y-4 py-4 bg-white ">
             <h3 className="font-bold text-lg">مجموع بلاغات مقدمي الخدمة</h3>
-            <p className="font-bold text-4xl">{stats ? stats : "-"}</p>
+            <p className="font-bold text-4xl">
+              {stats.total_items2 ? stats.total_items2 : "0"}
+            </p>
           </div>
         </div>
       </div>

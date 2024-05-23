@@ -7,8 +7,8 @@ import { gsap } from "gsap";
 
 const App = () => {
   const [location, setLocation] = useState({
-    lat: 31.00015556438264,
-    lng: 29.74384188652039,
+    lat: 21.373802072095938,
+    lng: 39.944572448730476,
   });
   const [clearIntro, setClearIntro] = useState(false);
   // const checkLocation = useLocationService();

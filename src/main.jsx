@@ -6,10 +6,17 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DashboardReview from "./pages/DashboardReview.jsx";
 import Form from "./components/Form.jsx";
 import Sucsess from "./pages/Sucsess.jsx";
+import NotFound from "./pages/notFound/NotFound";
+import Login from "./pages/auth/Login.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Login />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/login",
     element: <App />,
   },
   {

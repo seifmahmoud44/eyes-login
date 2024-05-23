@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,7 @@
   margin: 0;
   box-sizing: border-box;
   direction: rtl;
+  font-family: "Cairo", sans-serif;
 }
 
 .container {
@@ -39,9 +42,11 @@
   0% {
     background-color: red;
   }
+
   50% {
     background-color: #fff;
   }
+
   100% {
     background-color: red;
   }
@@ -62,7 +67,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 }
 
 @media (max-width: 992px) {
@@ -73,10 +79,26 @@ input[type="number"] {
     align-items: center;
   }
 }
+
 input[type="text"]:focus-visible {
   /* border: 1px solid gray; */
   outline: none;
 }
+
 table input {
   text-align: center;
+}
+
+.watermark {
+  position: relative;
+}
+
+.hide_watermark {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 20px;
+  background: #fff;
+  z-index: 9999;
 }

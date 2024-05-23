@@ -3,18 +3,17 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import iconUrl from "../assets/pin.png"; // Import your custom pin image
 
-// eslint-disable-next-line react/prop-types
-const DashboardMap = ({ setLocation, location }) => {
+const DashboardMap = ({ location }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  const markerRef = useRef(null);
+  const markersRef = useRef([]);
 
   useEffect(() => {
     if (mapInstanceRef.current) return;
 
     mapInstanceRef.current = L.map(mapRef.current).setView(
-      [location.lat, location.lng],
-      18
+      [21.373802072095938, 39.944572448730476],
+      13
     );
 
     // Satellite tile layer
@@ -38,9 +37,15 @@ const DashboardMap = ({ setLocation, location }) => {
       iconAnchor: [16, 32], // Position of the image relative to the marker's location
     });
 
-    markerRef.current = L.marker([location.lat, location.lng], {
-      icon: customIcon,
-    }).addTo(mapInstanceRef.current);
+    // Add markers for each location
+    if (location) {
+      location.forEach((location) => {
+        const marker = L.marker([location.lat, location.lng], {
+          icon: customIcon,
+        }).addTo(mapInstanceRef.current);
+        markersRef.current.push(marker);
+      });
+    }
 
     return () => {
       mapInstanceRef.current.remove();
@@ -49,20 +54,46 @@ const DashboardMap = ({ setLocation, location }) => {
   }, []);
 
   useEffect(() => {
-    if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([location.lat, location.lng], 17);
-      markerRef.current.setLatLng([location.lat, location.lng]);
+    if (mapInstanceRef.current) {
+      markersRef.current.forEach((marker) =>
+        mapInstanceRef.current.removeLayer(marker)
+      );
+      markersRef.current = [];
+
+      const customIcon = L.icon({
+        iconUrl: iconUrl,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+      });
+
+      if (location) {
+        location.forEach((location) => {
+          const marker = L.marker([location.lat, location.lng], {
+            icon: customIcon,
+          }).addTo(mapInstanceRef.current);
+          markersRef.current.push(marker);
+        });
+
+        if (location.length > 0) {
+          const bounds = L.latLngBounds(
+            location.map((loc) => [loc.lat, loc.lng])
+          );
+          mapInstanceRef.current.fitBounds(bounds);
+        }
+      }
     }
   }, [location]);
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full watermark">
       <div
         id="map"
         className="relative"
         ref={mapRef}
         style={{ height: "100%", width: "100%" }}
       ></div>
+
+      <div className="hide_watermark"></div>
     </div>
   );
 };

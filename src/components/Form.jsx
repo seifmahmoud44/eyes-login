@@ -37,7 +37,7 @@ const Form = () => {
     };
     console.log(finalData);
     sendData(
-      "https://api-eyes.disgin.website/backend/create/reporter.php?api=311958357932035780279254406072",
+      "https://eye-almashaeir.com/backend/create/reporter.php?api=311958357932035780279254406072",
       finalData
     );
   };
@@ -96,7 +96,7 @@ const Form = () => {
 
         <div className="w-full">
           <label className="block" htmlFor="user_management">
-            {type === "1" ? "الادارة التابعة لها:" : "مكتب تقديم الخدمة :"}
+            {type === "1" ? "الادارة التابع لها:" : "مكتب تقديم الخدمة :"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
@@ -123,21 +123,23 @@ const Form = () => {
         </div>
 
         <div className="w-full">
-          <label className="block" htmlFor="category">
+          <label className="block" htmlFor="report_category">
             تصنيف البلاغ:
           </label>
           <select
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-            {...register("category", { required: true })}
+            {...register("report_category", { required: true })}
           >
             <option value=""></option>
             <option value="1">البنية التحتية</option>
             <option value="2">الجاهزية</option>
-            <option value="3">الاعاشة</option>
+            <option value="3">الإعاشة</option>
             <option value="4">التشغيل والصيانة</option>
-            <option value="5">اخري</option>
+            <option value="5">أخرى</option>
           </select>
-          {errors.category && <span className="text-red-500">مطلوب</span>}
+          {errors.report_category && (
+            <span className="text-red-500">مطلوب</span>
+          )}
         </div>
 
         <div className="w-full">

@@ -10,14 +10,15 @@ const MapComponent = ({ setLocation, location }) => {
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
   const [position, setPosition] = useState(location); // Default position
+  const [showMarker, setShowMarker] = useState(false); // State to control marker visibility
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setPosition({
-            lat: position.coords.latitude || 21.4146051,
-            lng: position.coords.longitude || 39.894564,
+            lat: position.coords.latitude || 21.373802072095938,
+            lng: position.coords.longitude || 39.944572448730476,
           });
         },
         (error) => {
@@ -37,7 +38,7 @@ const MapComponent = ({ setLocation, location }) => {
 
     mapInstanceRef.current = L.map(mapRef.current).setView(
       [position.lat, position.lng],
-      17
+      13
     );
 
     // Satellite tile layer
@@ -63,11 +64,12 @@ const MapComponent = ({ setLocation, location }) => {
 
     markerRef.current = L.marker([position.lat, position.lng], {
       icon: customIcon,
-    }).addTo(mapInstanceRef.current);
+    });
 
     mapInstanceRef.current.on("click", function (e) {
       setPosition({ lat: e.latlng.lat, lng: e.latlng.lng });
       setLocation({ lat: e.latlng.lat, lng: e.latlng.lng });
+      setShowMarker(true); // Show marker when location is set
     });
 
     return () => {
@@ -78,10 +80,17 @@ const MapComponent = ({ setLocation, location }) => {
 
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 17);
-      markerRef.current.setLatLng([position.lat, position.lng]);
+      mapInstanceRef.current.setView([position.lat, position.lng], 13);
+      if (showMarker) {
+        markerRef.current
+          .setLatLng([position.lat, position.lng])
+          .addTo(mapInstanceRef.current);
+      } else {
+        markerRef.current.remove();
+      }
     }
-  }, [position]);
+  }, [position, showMarker]);
+
   const [showModel, setShowModel] = useState(false);
 
   return (
@@ -94,13 +103,15 @@ const MapComponent = ({ setLocation, location }) => {
         className="relative"
         ref={mapRef}
         style={{ height: "100%", width: "100%" }}
-      ></div>
-      <div className="z-[1000]  py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
+      >
+        <div className="hide_watermark"></div>
+      </div>
+      <div className="z-[999999]  py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
         <button
           onClick={() => setShowModel(true)}
           className="font-bold text-2xl  max-w-full px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
         >
-          تاكيد
+          تأكيد الموقع
         </button>
       </div>
     </div>
