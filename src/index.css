@@ -64,3 +64,19 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
+
+@media (max-width: 992px) {
+  .grid-con {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+}
+input[type="text"]:focus-visible {
+  /* border: 1px solid gray; */
+  outline: none;
+}
+table input {
+  text-align: center;
+}

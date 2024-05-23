@@ -1,5 +1,5 @@
 import { BeatLoader } from "react-spinners";
-import logo from "../assets/logo.webp";
+import logo from "../assets/logo.png";
 
 const Intro = () => {
   return (

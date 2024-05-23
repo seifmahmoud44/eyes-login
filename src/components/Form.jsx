@@ -8,7 +8,7 @@ import { Toaster, toast } from "sonner";
 import { useLocation, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
-import PhoneInput from "react-phone-input-2";
+
 import "react-phone-input-2/lib/style.css";
 
 const Form = () => {
