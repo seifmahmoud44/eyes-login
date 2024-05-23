@@ -7,6 +7,7 @@ const DashboardReview = () => {
     lat: 21.4146051,
     lng: 39.894564,
   });
+  const [stats, setStats] = useState("");
   return (
     <div className="grid grid-con grid-cols-2 grid-rows-3 h-screen gap-2 bg-slate-300">
       {/* map */}
@@ -22,18 +23,18 @@ const DashboardReview = () => {
         <div className="flex justify-center items-center h-full  gap-2">
           <div className="text-center flex flex-col justify-center items-center w-full  h-full bg-white space-y-4 py-4">
             <h3 className="font-bold text-lg">مجموع بلاغات الرفع الميداني</h3>
-            <p className="font-bold text-4xl">7</p>
+            <p className="font-bold text-4xl">{stats ? stats : "-"}</p>
           </div>
           <div className="text-center flex flex-col justify-center items-center w-full h-full  space-y-4 py-4 bg-white ">
             <h3 className="font-bold text-lg">مجموع بلاغات مقدمي الخدمة</h3>
-            <p className="font-bold text-4xl">7</p>
+            <p className="font-bold text-4xl">{stats ? stats : "-"}</p>
           </div>
         </div>
       </div>
       {/* table */}
 
       <div className="table-con   max-md:w-full bg-green-400 col-span-2 row-span-2 ">
-        <DashTable />
+        <DashTable setLocation={setLocation} setStats={setStats} />
       </div>
     </div>
   );

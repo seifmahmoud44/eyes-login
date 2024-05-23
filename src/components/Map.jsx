@@ -16,8 +16,8 @@ const MapComponent = ({ setLocation, location }) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setPosition({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            lat: position.coords.latitude || 21.4146051,
+            lng: position.coords.longitude || 39.894564,
           });
         },
         (error) => {

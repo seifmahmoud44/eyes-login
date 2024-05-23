@@ -5,14 +5,17 @@ import submitImg from "../assets/check.png";
 import { useEffect, useState } from "react";
 import useAxiosGet from "../hooks/useAxiosGet";
 import EditModel from "./EditModel";
-const DashTable = () => {
+import { convertToNormalObject } from "../utility/objCnverter";
+import useAxiosDelete from "../hooks/useAxiosDelete";
+import { Toaster, toast } from "sonner";
+const DashTable = ({ setLocation, setStats }) => {
   const [pageNumber, setPageNumber] = useState("1");
   const [reportCategory, setReportCategory] = useState("");
   const [typeReport, setTypeReport] = useState("1");
   const [reportStatus, setReportStatus] = useState("");
   // edid state
   const [editMood, setEditMood] = useState(false);
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState("");
 
   const url = `https://api-eyes.disgin.website/backend/read/reporter.php?api=311958357932035780279254406072&page=${pageNumber}&report_category=${reportCategory}&type_report=${typeReport}&report_status=${reportStatus}`;
   const repoCatObj = {
@@ -28,16 +31,19 @@ const DashTable = () => {
     3: "تم المباشرة",
     4: "تم حل البلاغ",
   };
-  const { data, error, loading, fetchData } = useAxiosGet();
-  useEffect(() => {
-    fetchData(url);
-  }, [fetchData, url]);
-  console.log(data);
-  // inputs stats
-  const [userName, setUserName] = useState("");
+  const { data, fetchData } = useAxiosGet();
+  const { deleteData } = useAxiosDelete();
 
+  useEffect(() => {
+    fetchData(url).then((e) => {
+      setStats(e.total_items);
+    });
+  }, [fetchData, url, editMood]);
+  const deleteUrl = `https://api-eyes.disgin.website/backend/delete/reporter.php?api=311958357932035780279254406072`;
+  // inputs stats
   return (
     <div className="overflow-x-auto bg-white h-full overflow-y-scroll flex flex-col">
+      <Toaster position="bottom-left" richColors />
       {editMood && (
         <EditModel
           data={selected}
@@ -108,112 +114,118 @@ const DashTable = () => {
         </thead>
 
         <tbody>
-          {data !== null &&
-            data.data.map((ele) => {
-              return (
-                <tr key={ele.id} className="border-b text-center">
-                  <td className=" py-4 text-center">
-                    {ele.user_name}
-                    {/* <input
+          {data?.data && data !== null
+            ? data.data.map((ele) => {
+                return (
+                  <tr key={ele.id} className="border-b text-center">
+                    <td className=" py-4 text-center">
+                      {ele.user_name}
+                      {/* <input
                       type="text"
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       className="disabled:border-none p-1 border"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {ele.user_management}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {ele.user_management}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {ele.registration_number}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {ele.registration_number}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {repoCatObj[ele.report_category]}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {repoCatObj[ele.report_category]}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {ele.report_description}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {ele.report_description}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {ele.contact_number}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {ele.contact_number}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {ele.date_add}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {ele.date_add}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">
-                    {repoStatusObj[ele.report_status]}
-                    {/* <input
+                    </td>
+                    <td className=" py-4">
+                      {repoStatusObj[ele.report_status]}
+                      {/* <input
                       type="text"
                       value={"اسم المراقب"}
                       disabled
                       className="disabled:bg-gray-200 p-1"
                     /> */}
-                  </td>
-                  <td className=" py-4">{/* الجهة المعاينة  */}يسر</td>
-                  <td className="py-4 px-4 flex justify-center items-center gap-5 w-[200px]">
-                    <img
-                      className="w-6 cursor-pointer hover:scale-110 transition-all"
-                      src={openImg}
-                      alt=""
-                    />
-                    <img
-                      className="w-6 cursor-pointer hover:scale-110 transition-all"
-                      src={submitImg}
-                      alt=""
-                    />
-                    <img
-                      className="w-6 cursor-pointer hover:scale-110 transition-all"
-                      src={editImg}
-                      alt=""
-                      onClick={() => {
-                        setSelected(ele);
-                        setEditMood(true);
-                      }}
-                    />
-                    <img
-                      className="w-6 cursor-pointer hover:scale-110 transition-all"
-                      src={deleteImg}
-                      alt=""
-                    />
-                  </td>
-                </tr>
-              );
-            })}
+                    </td>
+                    <td className=" py-4">{ele?.reporting_party || "مطلوب"}</td>
+                    <td className="py-4 px-4 flex justify-center items-center gap-5 w-[200px]">
+                      <img
+                        className="w-6 cursor-pointer hover:scale-110 transition-all"
+                        src={openImg}
+                        alt=""
+                        onClick={() =>
+                          setLocation(convertToNormalObject(ele.location_map))
+                        }
+                      />
+
+                      <img
+                        className="w-6 cursor-pointer hover:scale-110 transition-all"
+                        src={editImg}
+                        alt=""
+                        onClick={() => {
+                          setSelected(ele);
+                          setEditMood(true);
+                        }}
+                      />
+                      <img
+                        className="w-6 cursor-pointer hover:scale-110 transition-all"
+                        src={deleteImg}
+                        alt=""
+                        onClick={() =>
+                          deleteData(deleteUrl, ele.id).then(() => {
+                            fetchData(url);
+                            toast.error("تم الحذف");
+                          })
+                        }
+                      />
+                    </td>
+                  </tr>
+                );
+              })
+            : ""}
         </tbody>
       </table>
 

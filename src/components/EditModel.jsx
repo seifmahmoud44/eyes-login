@@ -1,27 +1,173 @@
-import closeImg from "../assets/close.png";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
+import closeImg from "../assets/close-black.png";
+
+import useAxiosUpdate from "../hooks/useAxiosUpdate";
 // eslint-disable-next-line react/prop-types
-const EditModel = ({ editModel, setEditModel, data }) => {
-  console.log(data);
+const EditModel = ({ setEditModel, data, setRefresh }) => {
+  //   const [contactNumber, setContactNumber] = useState(data.contact_number);
+  //   const [registrationNumber, setRegistrationNumber] = useState(
+  //     data.registration_number
+  //   );
+  //   const [reportCategory, setReportCategory] = useState(data.report_category);
+  const [reportStatus, setReportStatus] = useState(data?.report_status);
+  //   const [userManagement, setUserManagement] = useState(data.user_management);
+  //   const [userName, setUserName] = useState(data.user_name);
+  const [reportingParty, setReportingParty] = useState(data?.reporting_party);
+  //   const repoCatObj = {
+  //     1: "البنى التحتية",
+  //     2: "الجاهزية",
+  //     3: "الاعاشة",
+  //     4: "التشغيل والصيانة",
+  //     5: "اخرى",
+  //   };
+
+  const { sendData, response } = useAxiosUpdate(setRefresh);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    // const data = {
+    //     contact_number: contactNumber,
+    //     registration_number: registrationNumber,
+    //     report_category: reportCategory,
+    //     report_status: reportStatus,
+    //     user_management: userManagement,
+    //     user_name: userName
+
+    // }
+    const updatedData = {
+      report_status: reportStatus,
+      reporting_party: reportingParty,
+      id: data?.id,
+    };
+    sendData(
+      "https://api-eyes.disgin.website/backend/update/reporter.php?api=311958357932035780279254406072",
+      updatedData,
+      setRefresh
+    );
+  };
+  useEffect(() => {
+    if (response?.request === "successfully") {
+      setEditModel(false);
+    }
+  }, [response?.request, setEditModel]);
+  console.log(response);
   return (
     <div className="absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-40 z-[2000] flex justify-center items-center">
-      <div className=" relative  w-[500px] bg-white rounded-md p-5">
+      <div className=" relative  w-[500px] bg-white rounded-md p-7">
         <img
           onClick={() => setEditModel(false)}
-          className="absolute left-4 top-4 cursor-pointer hover:scale-110 transition-all"
+          className="w-6 absolute left-4 top-4 cursor-pointer hover:scale-110 transition-all"
           src={closeImg}
           alt=""
         />
-        <form action=""></form>
-        <div className="w-full">
-          <label className="block" htmlFor="registration_number">
-            رقم الشاخص:
-          </label>
-          <input
-            className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-            type="text"
-            required
-          />
-        </div>
+        <form action="" onSubmit={submitHandler}>
+          {/* <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              اسم المراقب :
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              onChange={(e) => setUserName(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={userName}
+              type="text"
+              required
+            />
+          </div>
+          <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              الادارة التابع لها :
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              type="text"
+              required
+              onChange={(e) => setUserManagement(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={userManagement}
+            />
+          </div>
+          <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              رقم الشاخص:
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              type="text"
+              required
+              onChange={(e) => setRegistrationNumber(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={registrationNumber}
+            />
+          </div>
+          <div className="w-full">
+            <label className="block" htmlFor="category">
+              تصنيف البلاغ:
+            </label>
+            <select
+              value={reportCategory}
+              onChange={(e) => setReportCategory(e.target.value)}
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              required
+            >
+              <option value="1">البنية التحتية</option>
+              <option value="2">الجاهزية</option>
+              <option value="3">الاعاشة</option>
+              <option value="4">التشغيل والصيانة</option>
+              <option value="5">اخري</option>
+            </select>
+          </div>
+          <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              رقم التواصل:
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              type="text"
+              required
+              onChange={(e) => setContactNumber(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={contactNumber}
+            />
+          </div> */}
+          <div className="w-full">
+            <label htmlFor="inputFilter" className="block">
+              حالة البلاغ
+            </label>
+            <select
+              // eslint-disable-next-line react/prop-types
+              value={reportStatus}
+              onChange={(e) => setReportStatus(e.target.value)}
+              id="inputFilter"
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+            >
+              <option value="1">بلاغ جديد</option>
+              <option value="2">تحت المراجعة</option>
+              <option value="3">تم المباشرة</option>
+              <option value="4">تم حل البلاغ</option>
+            </select>
+          </div>
+          <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              الجهة المعينة بمباشرة البلاغ :
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              type="text"
+              required
+              onChange={(e) => setReportingParty(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={reportingParty}
+              placeholder="مطلوب"
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-yellow-300 px-4 py-2 my-2 mx-auto block rounded text-black"
+          >
+            تعديل
+          </button>
+        </form>
       </div>
     </div>
   );
