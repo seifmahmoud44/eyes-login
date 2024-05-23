@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Map from "./components/Map";
 import Intro from "./components/Intro";
 import { gsap } from "gsap";
-import CheckLocation from "./components/CheckLocation";
-import useLocationService from "./hooks/useLocationService";
+// import CheckLocation from "./components/CheckLocation";
+// import useLocationService from "./hooks/useLocationService";
 
 const App = () => {
   const [location, setLocation] = useState({
@@ -11,7 +11,7 @@ const App = () => {
     lng: 29.74384188652039,
   });
   const [clearIntro, setClearIntro] = useState(false);
-  const checkLocation = useLocationService();
+  // const checkLocation = useLocationService();
 
   useEffect(() => {
     const loadHandler = () => {
@@ -30,7 +30,7 @@ const App = () => {
       window.removeEventListener("load", loadHandler);
     };
   }, []);
-  console.log(clearIntro);
+
   return (
     <div className="overflow-hidden">
       {/* {!clearIntro && (
@@ -48,11 +48,7 @@ const App = () => {
           <Intro />
         </div>
       )}
-      {checkLocation ? (
-        clearIntro && <Map location={location} setLocation={setLocation} />
-      ) : (
-        <CheckLocation />
-      )}
+      {clearIntro && <Map location={location} setLocation={setLocation} />}
     </div>
   );
 };
