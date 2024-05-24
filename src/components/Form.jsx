@@ -5,18 +5,24 @@ import captureImg from "../assets/capture.png";
 import closeImg from "../assets/close.png";
 import { useState } from "react";
 import { Toaster, toast } from "sonner";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
-
+import backImg from "../assets/back-arrow.png";
 import "react-phone-input-2/lib/style.css";
+import AudioRecorder from "./AudioRecorder";
 
 const Form = () => {
+  const navigate = useNavigate();
   const [uploadFile, setUploadFile] = useState("");
   const [camModel, setCamModel] = useState(false);
+  const [recording, setRecording] = useState(false);
   const { state } = useLocation();
   const { type } = useParams();
-  const { response, loading, error, sendData } = useAxiosPost();
+  const { loading, sendData } = useAxiosPost();
+  const audioHandler = (audio) => {
+    setUploadFile(audio);
+  };
 
   const {
     register,
@@ -35,7 +41,7 @@ const Form = () => {
       type_report: type,
       location_map: state.position,
     };
-    console.log(finalData);
+
     sendData(
       "https://eye-almashaeir.com/backend/create/reporter.php?api=311958357932035780279254406072",
       finalData
@@ -43,7 +49,7 @@ const Form = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className=" flex justify-center items-center">
       <Toaster richColors position="bottom-center" />
       {camModel && (
         <div className="absolute top-0 left-0 w-full h-full z-[2000]">
@@ -56,9 +62,16 @@ const Form = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-center items-center gap-2 py-10 w-[400px] max-md:w-full px-5"
+        className="relative flex flex-col justify-center items-center gap-2 py-10 w-[400px] max-md:w-full px-5"
       >
-        {uploadFile ? (
+        <div
+          onClick={() => navigate("/login")}
+          className="bg-gray-300 absolute left-0 top-10  p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
+        >
+          <img src={backImg} alt="" className="w-6" />
+        </div>
+
+        {uploadFile && (
           <div className="flex justify-center items-center gap-7">
             <p>{uploadFile.name}</p>
             <div
@@ -70,17 +83,23 @@ const Form = () => {
               <img className="w-2" src={closeImg} alt="" />
             </div>
           </div>
-        ) : (
-          <div className="flex justify-center items-center gap-6">
-            <FileUpload setUploadFile={setUploadFile} />
-            <div
-              onClick={() => setCamModel(true)}
-              className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
-            >
-              <img src={captureImg} alt="" className="w-6 " />
-            </div>
-          </div>
         )}
+        <div className="flex justify-center items-center gap-6">
+          {!uploadFile && !recording && (
+            <div className="flex justify-center items-center gap-6">
+              <FileUpload setUploadFile={setUploadFile} />
+              <div
+                onClick={() => setCamModel(true)}
+                className="bg-[#1A6537] p-3 flex justify-center items-center rounded cursor-pointer hover:scale-110 transition-all"
+              >
+                <img src={captureImg} alt="" className="w-6 " />
+              </div>
+            </div>
+          )}
+          {!uploadFile && (
+            <AudioRecorder setRecording={setRecording} onStop={audioHandler} />
+          )}
+        </div>
 
         <div className="w-full">
           <label className="block" htmlFor="user_name">

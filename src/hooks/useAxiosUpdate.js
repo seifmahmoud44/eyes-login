@@ -22,17 +22,22 @@ const useAxiosUpdate = () => {
       }
     });
 
-    try {
-      const response = await axios.post(url, formData, {
+    return axios
+      .post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+      })
+      .then((response) => {
+        setResponse(response.data);
+        setLoading(false);
+        return response.data;
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+        throw error;
       });
-      setResponse(response.data);
-    } catch (error) {
-      setError(error.message);
-    }
-    setLoading(false);
   };
 
   return { response, loading, error, sendData };

@@ -13,7 +13,7 @@ const DashboardMap = ({ location }) => {
 
     mapInstanceRef.current = L.map(mapRef.current).setView(
       [21.373802072095938, 39.944572448730476],
-      13
+      8
     );
 
     // Satellite tile layer
@@ -39,6 +39,7 @@ const DashboardMap = ({ location }) => {
 
     // Add markers for each location
     if (location) {
+      // eslint-disable-next-line react/prop-types
       location.forEach((location) => {
         const marker = L.marker([location.lat, location.lng], {
           icon: customIcon,
@@ -93,7 +94,7 @@ const DashboardMap = ({ location }) => {
         style={{ height: "100%", width: "100%" }}
       ></div>
 
-      <div className="hide_watermark"></div>
+      <div className="hide_watermark "></div>
     </div>
   );
 };
