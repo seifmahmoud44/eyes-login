@@ -8,6 +8,7 @@ import Form from "./components/Form.jsx";
 import Sucsess from "./pages/Sucsess.jsx";
 import NotFound from "./pages/notFound/NotFound";
 import Login from "./pages/auth/Login.jsx";
+import RouteProvider from "./components/RouteProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,19 +18,39 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <App />,
+    element: (
+      <RouteProvider>
+        <App />
+      </RouteProvider>
+    ),
   },
   {
     path: "/request/:type",
-    element: <Form />,
+    element: (
+      <RouteProvider>
+        <Form />
+      </RouteProvider>
+    ),
   },
   {
     path: "/dashboard",
-    element: <DashboardReview />,
+    element: (
+      <RouteProvider>
+        <DashboardReview veiw={true} />
+      </RouteProvider>
+    ),
+  },
+  {
+    path: "/dashboard-view",
+    element: <DashboardReview veiw={false} />,
   },
   {
     path: "/sucsess",
-    element: <Sucsess />,
+    element: (
+      <RouteProvider>
+        <Sucsess />
+      </RouteProvider>
+    ),
   },
 ]);
 

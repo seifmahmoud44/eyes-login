@@ -7,7 +7,7 @@ import DashboardMap from "./DashboardMap";
 import { convertToNormalObject } from "../utility/objCnverter";
 import { toast } from "sonner";
 // eslint-disable-next-line react/prop-types
-const EditModel = ({ setEditModel, data, setRefresh }) => {
+const EditModel = ({ setEditModel, data, veiw }) => {
   //   const [contactNumber, setContactNumber] = useState(data.contact_number);
   //   const [registrationNumber, setRegistrationNumber] = useState(
   //     data.registration_number
@@ -86,7 +86,7 @@ const EditModel = ({ setEditModel, data, setRefresh }) => {
             ></audio>
           )}
         </div>
-        <form action="" onSubmit={submitHandler}>
+        <form action="" onSubmit={submitHandler} className="space-y-3">
           <div className="w-full">
             <label className="block" htmlFor="registration_number">
               اسم المراقب :
@@ -162,6 +162,33 @@ const EditModel = ({ setEditModel, data, setRefresh }) => {
             />
           </div>
           <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              بريد مقدم البلاغ :
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              type="text"
+              required
+              disabled
+              // onChange={(e) => setContactNumber(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={data.email_client}
+            />
+          </div>
+          <div className="w-full">
+            <label className="block" htmlFor="registration_number">
+              تاريخ استلام البلاغ :
+            </label>
+            <input
+              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+              type="text"
+              disabled
+              // onChange={(e) => setContactNumber(e.target.value)}
+              // eslint-disable-next-line react/prop-types
+              value={data.date_add}
+            />
+          </div>
+          <div className="w-full">
             <label htmlFor="inputFilter" className="block">
               حالة البلاغ
             </label>
@@ -170,6 +197,7 @@ const EditModel = ({ setEditModel, data, setRefresh }) => {
               value={reportStatus}
               onChange={(e) => setReportStatus(e.target.value)}
               id="inputFilter"
+              disabled={!veiw}
               className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             >
               <option value="1">بلاغ جديد</option>
@@ -182,22 +210,29 @@ const EditModel = ({ setEditModel, data, setRefresh }) => {
             <label className="block" htmlFor="registration_number">
               الجهة المعينة بمباشرة البلاغ :
             </label>
-            <input
-              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-              type="text"
-              required
-              onChange={(e) => setReportingParty(e.target.value)}
-              // eslint-disable-next-line react/prop-types
-              value={reportingParty}
-              placeholder="مطلوب"
-            />
+            {veiw ? (
+              <textarea
+                rows={3}
+                className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+                type="text"
+                onChange={(e) => setReportingParty(e.target.value)}
+                // eslint-disable-next-line react/prop-types
+                value={reportingParty}
+                placeholder="مطلوب"
+              />
+            ) : (
+              <p>{reportingParty || "لا توجد بيانات"}</p>
+            )}
           </div>
-          <button
-            type="submit"
-            className="bg-yellow-300 px-4 py-2 my-2 mx-auto block rounded text-black"
-          >
-            تعديل
-          </button>
+
+          {veiw && (
+            <button
+              type="submit"
+              className="bg-yellow-300 px-4 py-2 my-2 mx-auto block rounded text-black"
+            >
+              تعديل
+            </button>
+          )}
         </form>
       </div>
     </div>

@@ -8,12 +8,10 @@ import { Toaster, toast } from "sonner";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
-<<<<<<< HEAD
+import Cookies from "js-cookie";
 import backImg from "../assets/back-arrow.png";
 import "react-phone-input-2/lib/style.css";
 import AudioRecorder from "./AudioRecorder";
-=======
->>>>>>> 10f2549f8cdb12e8fe27b595b5d3da58253a11de
 
 const Form = () => {
   const navigate = useNavigate();
@@ -43,6 +41,7 @@ const Form = () => {
       file_link: uploadFile,
       type_report: type,
       location_map: state.position,
+      email_client: Cookies.get("email_client") || "",
     };
 
     sendData(

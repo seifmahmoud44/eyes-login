@@ -2,22 +2,22 @@ import openImg from "../assets/open.png";
 import deleteImg from "../assets/delete.png";
 import editImg from "../assets/edit.png";
 import submitImg from "../assets/check.png";
+import exelImg from "../assets/excel.png";
+
 import { useEffect, useState } from "react";
 import useAxiosGet from "../hooks/useAxiosGet";
 import EditModel from "./EditModel";
 import { convertToNormalObject } from "../utility/objCnverter";
 import useAxiosDelete from "../hooks/useAxiosDelete";
 import { Toaster, toast } from "sonner";
-import MediaModel from "./MediaModel";
 
-const DashTable = ({ setLocation, setStats }) => {
-  const [pageNumber, setPageNumber] = useState("1");
+const DashTable = ({ setLocation, setStats, veiw }) => {
+  const [pageNumber, setPageNumber] = useState(1);
   const [reportCategory, setReportCategory] = useState("");
   const [typeReport, setTypeReport] = useState("");
   const [reportStatus, setReportStatus] = useState("");
   const [editMood, setEditMood] = useState(false);
   const [selected, setSelected] = useState("");
-  const [mediaModel, setMediaModel] = useState(false);
 
   const url = `https://eye-almashaeir.com/backend/read/reporter.php?api=311958357932035780279254406072&page=${pageNumber}&report_category=${reportCategory}&type_report=${typeReport}&report_status=${reportStatus}`;
 
@@ -38,7 +38,7 @@ const DashTable = ({ setLocation, setStats }) => {
 
   const { data, fetchData } = useAxiosGet();
   const { deleteData } = useAxiosDelete();
-  console.log(data);
+
   useEffect(() => {
     if (editMood) {
       document.body.style.overflow = "hidden";
@@ -46,6 +46,9 @@ const DashTable = ({ setLocation, setStats }) => {
       document.body.style.overflow = "auto";
     }
     fetchData(url).then((e) => {
+      if (e?.request === "empty") {
+        setLocation("");
+      }
       setStats({
         total_items1: e.total_items1,
         total_items2: e.total_items2,
@@ -69,6 +72,7 @@ const DashTable = ({ setLocation, setStats }) => {
           data={selected}
           editModel={editMood}
           setEditModel={setEditMood}
+          veiw={veiw}
         />
       )}
       <div className="relative m-[2px] my-3 mx-3 flex justify-start items-center gap-3">
@@ -83,19 +87,7 @@ const DashTable = ({ setLocation, setStats }) => {
           <option value="1">بلاغات المراقب الميداني</option>
           <option value="2">بلاغات مقدمي الخدمة</option>
         </select>
-        <label htmlFor="inputFilter1">حالة البلاغ</label>
-        <select
-          value={reportStatus}
-          onChange={(e) => setReportStatus(e.target.value)}
-          id="inputFilter1"
-          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
-        >
-          <option value="">الكل</option>
-          <option value="1">بلاغ جديد</option>
-          <option value="2">تحت المراجعة</option>
-          <option value="3">تم المباشرة</option>
-          <option value="4">تم حل البلاغ</option>
-        </select>
+
         <label htmlFor="inputFilter2">تصنيف البلاغ</label>
         <select
           value={reportCategory}
@@ -110,6 +102,22 @@ const DashTable = ({ setLocation, setStats }) => {
           <option value="4">التشغيل والصيانة</option>
           <option value="5">أخرى</option>
         </select>
+        <label htmlFor="inputFilter1">حالة البلاغ</label>
+        <select
+          value={reportStatus}
+          onChange={(e) => setReportStatus(e.target.value)}
+          id="inputFilter1"
+          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        >
+          <option value="">الكل</option>
+          <option value="1">بلاغ جديد</option>
+          <option value="2">تحت المراجعة</option>
+          <option value="3">تم المباشرة</option>
+          <option value="4">تم حل البلاغ</option>
+        </select>
+        <a href={`https://eye-almashaeir.com/backend/${data && data.download}`}>
+          <img src={exelImg} alt="" className="w-8 mr-3 cursor-pointer" />
+        </a>
       </div>
 
       <table className="min-w-full text-xs whitespace-nowrap text-center px-3">
@@ -138,6 +146,7 @@ const DashTable = ({ setLocation, setStats }) => {
             <th className="py-4 px-2 text-sm">تصنيف البلاغ</th>
             <th className="py-4 px-2 text-sm">وصف البلاغ</th>
             <th className="py-4 px-2 text-sm">رقم التواصل</th>
+            <th className="py-4 px-2 text-sm">بريد مقدم البلاغ</th>
             <th className="py-4 px-2 text-sm">تاريخ استلام البلاغ</th>
             <th className="py-4 px-2 text-sm">حالة البلاغ</th>
             <th className="py-4 px-2 text-sm">الجهة المعنية بمباشرة البلاغ</th>
@@ -180,6 +189,7 @@ const DashTable = ({ setLocation, setStats }) => {
                   <td className="py-4">{repoCatObj[ele.report_category]}</td>
                   <td className="py-4">{ele.report_description}</td>
                   <td className="py-4">{ele.contact_number}</td>
+                  <td className="py-4">{ele.email_client}</td>
                   <td className="py-4">{ele.date_add}</td>
                   <td className="py-4">{repoStatusObj[ele.report_status]}</td>
                   <td className="py-4">{ele?.reporting_party || "مطلوب"}</td>
@@ -220,18 +230,19 @@ const DashTable = ({ setLocation, setStats }) => {
                         setEditMood(true);
                       }}
                     /> */}
-
-                    <img
-                      className="w-6 cursor-pointer hover:scale-110 transition-all"
-                      src={deleteImg}
-                      alt=""
-                      onClick={() =>
-                        deleteData(deleteUrl, ele.id).then(() => {
-                          fetchData(url);
-                          toast.error("تم الحذف");
-                        })
-                      }
-                    />
+                    {veiw && (
+                      <img
+                        className="w-6 cursor-pointer hover:scale-110 transition-all"
+                        src={deleteImg}
+                        alt=""
+                        onClick={() =>
+                          deleteData(deleteUrl, ele.id).then(() => {
+                            fetchData(url);
+                            toast.error("تم الحذف");
+                          })
+                        }
+                      />
+                    )}
                   </td>
                 </tr>
               );

@@ -108,8 +108,9 @@ const MapComponent = ({ setLocation, location }) => {
       </div>
       <div className="z-[999999]  py-3 absolute bottom-0 left-0 w-full bg-black bg-opacity-15 flex justify-center items-center ">
         <button
+          disabled={!showMarker}
           onClick={() => setShowModel(true)}
-          className="font-bold text-2xl  max-w-full px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
+          className="disabled:bg-black disabled:bg-opacity-70 font-bold text-2xl  max-w-full px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
         >
           تأكيد الموقع
         </button>

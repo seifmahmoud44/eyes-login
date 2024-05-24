@@ -3,6 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import iconUrl from "../assets/pin.png"; // Import your custom pin image
 
+// eslint-disable-next-line react/prop-types
 const DashboardMap = ({ location }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -13,7 +14,7 @@ const DashboardMap = ({ location }) => {
 
     mapInstanceRef.current = L.map(mapRef.current).setView(
       [21.373802072095938, 39.944572448730476],
-      8
+      13
     );
 
     // Satellite tile layer
@@ -40,8 +41,8 @@ const DashboardMap = ({ location }) => {
     // Add markers for each location
     if (location) {
       // eslint-disable-next-line react/prop-types
-      location.forEach((location) => {
-        const marker = L.marker([location.lat, location.lng], {
+      location.forEach((loc) => {
+        const marker = L.marker([loc.lat, loc.lng], {
           icon: customIcon,
         }).addTo(mapInstanceRef.current);
         markersRef.current.push(marker);
@@ -68,8 +69,8 @@ const DashboardMap = ({ location }) => {
       });
 
       if (location) {
-        location.forEach((location) => {
-          const marker = L.marker([location.lat, location.lng], {
+        location.forEach((loc) => {
+          const marker = L.marker([loc.lat, loc.lng], {
             icon: customIcon,
           }).addTo(mapInstanceRef.current);
           markersRef.current.push(marker);
@@ -79,7 +80,7 @@ const DashboardMap = ({ location }) => {
           const bounds = L.latLngBounds(
             location.map((loc) => [loc.lat, loc.lng])
           );
-          mapInstanceRef.current.fitBounds(bounds);
+          mapInstanceRef.current.fitBounds(bounds, { maxZoom: 13 });
         }
       }
     }
@@ -94,7 +95,7 @@ const DashboardMap = ({ location }) => {
         style={{ height: "100%", width: "100%" }}
       ></div>
 
-      <div className="hide_watermark "></div>
+      <div className="hide_watermark"></div>
     </div>
   );
 };
