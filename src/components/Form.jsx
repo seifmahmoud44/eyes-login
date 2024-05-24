@@ -8,9 +8,12 @@ import { Toaster, toast } from "sonner";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
+<<<<<<< HEAD
 import backImg from "../assets/back-arrow.png";
 import "react-phone-input-2/lib/style.css";
 import AudioRecorder from "./AudioRecorder";
+=======
+>>>>>>> 10f2549f8cdb12e8fe27b595b5d3da58253a11de
 
 const Form = () => {
   const navigate = useNavigate();
@@ -134,11 +137,8 @@ const Form = () => {
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="text"
-            {...register("registration_number", { required: true })}
+            {...register("registration_number")}
           />
-          {errors.registration_number && (
-            <span className="text-red-500">مطلوب</span>
-          )}
         </div>
 
         <div className="w-full">
