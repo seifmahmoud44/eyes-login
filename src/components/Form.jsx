@@ -9,8 +9,6 @@ import { useLocation, useParams } from "react-router-dom";
 import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
 
-import "react-phone-input-2/lib/style.css";
-
 const Form = () => {
   const [uploadFile, setUploadFile] = useState("");
   const [camModel, setCamModel] = useState(false);
@@ -115,11 +113,8 @@ const Form = () => {
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="text"
-            {...register("registration_number", { required: true })}
+            {...register("registration_number")}
           />
-          {errors.registration_number && (
-            <span className="text-red-500">مطلوب</span>
-          )}
         </div>
 
         <div className="w-full">
