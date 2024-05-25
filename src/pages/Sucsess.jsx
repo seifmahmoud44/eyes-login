@@ -16,7 +16,7 @@ const Sucsess = () => {
       <h1 className="text-[#1A6537] text-2xl">تم ارسال بلاغك</h1>
       <img className="img w-[200px]" src={confirmImg} alt="" />
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/login")}
         className="bg-[#1A6537] px-4 py-2 text-white flex justify-center items-center rounded cursor-pointer"
       >
         اضافة بلاغ جديد

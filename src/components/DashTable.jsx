@@ -19,7 +19,7 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
   const [editMood, setEditMood] = useState(false);
   const [selected, setSelected] = useState("");
 
-  const url = `https://eye-almashaeir.com/backend/read/reporter.php?api=311958357932035780279254406072&page=${pageNumber}&report_category=${reportCategory}&type_report=${typeReport}&report_status=${reportStatus}`;
+  const url = `https://eye-almashaeir.com/backend/read/reporter.php?api=311958357932035780279254406072&page=${pageNumber}&report_category=${reportCategory}&type_report=${typeReport}&report_status=${reportStatus}&veiw=${veiw}`;
 
   const repoCatObj = {
     1: "البنى التحتية",
@@ -76,24 +76,28 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
         />
       )}
       <div className="relative m-[2px] my-3 mx-3 flex justify-start items-center gap-3">
-        <label htmlFor="inputFilter">نوع البلاغ</label>
+        <label htmlFor="inputFilter" className="whitespace-nowrap">
+          نوع البلاغ:
+        </label>
         <select
           onChange={(e) => setTypeReport(e.target.value)}
           value={typeReport}
           id="inputFilter"
-          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-[12px] lg:text-[20px] focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
         >
           <option value="">الكل</option>
           <option value="1">بلاغات المراقب الميداني</option>
           <option value="2">بلاغات مقدمي الخدمة</option>
         </select>
 
-        <label htmlFor="inputFilter2">تصنيف البلاغ</label>
+        <label htmlFor="inputFilter2" className="whitespace-nowrap">
+          تصنيف البلاغ:
+        </label>
         <select
           value={reportCategory}
           onChange={(e) => setReportCategory(e.target.value)}
           id="inputFilter2"
-          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-[12px] lg:text-[20px] focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
         >
           <option value="">الكل</option>
           <option value="1">البنية التحتية</option>
@@ -102,12 +106,14 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
           <option value="4">التشغيل والصيانة</option>
           <option value="5">أخرى</option>
         </select>
-        <label htmlFor="inputFilter1">حالة البلاغ</label>
+        <label htmlFor="inputFilter1" className="whitespace-nowrap">
+          حالة البلاغ:
+        </label>
         <select
           value={reportStatus}
           onChange={(e) => setReportStatus(e.target.value)}
           id="inputFilter1"
-          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="block w-40 rounded-lg border dark:border-none dark:bg-slate-200 p-2 text-[12px] lg:text-[20px] focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
         >
           <option value="">الكل</option>
           <option value="1">بلاغ جديد</option>
@@ -115,8 +121,23 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
           <option value="3">تم المباشرة</option>
           <option value="4">تم حل البلاغ</option>
         </select>
+
+        {veiw && (
+          <a
+            href="https://eye-almashaeir.com/login"
+            target="_blank"
+            className="mr-3 cursor-pointer whitespace-nowrap text-[12px] lg:text-[20px]"
+          >
+            اضافة بلاغ جديد
+          </a>
+        )}
+
         <a href={`https://eye-almashaeir.com/backend/${data && data.download}`}>
-          <img src={exelImg} alt="" className="w-8 mr-3 cursor-pointer" />
+          <img
+            src={exelImg}
+            alt=""
+            className="w-8 mr-3 cursor-pointer max-w-fit"
+          />
         </a>
       </div>
 
@@ -126,14 +147,14 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
             {typeReport === "" ? (
               <>
                 <th className="py-4 px-2 text-sm">اسم المراقب</th>
-                <th className="py-4 px-2 text-sm">الادارة التابع لها</th>
+                <th className="py-4 px-2 text-sm">الإدارة التابع لها</th>
                 <th className="py-4 px-2 text-sm">اسم مقدم البلاغ</th>
                 <th className="py-4 px-2 text-sm">مكتب تقديم الخدمة</th>
               </>
             ) : typeReport === "1" ? (
               <>
                 <th className="py-4 px-2 text-sm">اسم المراقب</th>
-                <th className="py-4 px-2 text-sm">الادارة التابع لها</th>
+                <th className="py-4 px-2 text-sm">الإدارة التابع لها</th>
               </>
             ) : (
               <>
@@ -141,12 +162,15 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
                 <th className="py-4 px-2 text-sm">مكتب تقديم الخدمة</th>
               </>
             )}
-
             <th className="py-4 px-2 text-sm">رقم الشاخص</th>
             <th className="py-4 px-2 text-sm">تصنيف البلاغ</th>
             <th className="py-4 px-2 text-sm">وصف البلاغ</th>
             <th className="py-4 px-2 text-sm">رقم التواصل</th>
-            <th className="py-4 px-2 text-sm">بريد مقدم البلاغ</th>
+            {veiw && (
+              <th className="py-4 px-2 text-sm">
+                البريد الإلكتروني لمقدم البلاغ
+              </th>
+            )}
             <th className="py-4 px-2 text-sm">تاريخ استلام البلاغ</th>
             <th className="py-4 px-2 text-sm">حالة البلاغ</th>
             <th className="py-4 px-2 text-sm">الجهة المعنية بمباشرة البلاغ</th>
@@ -189,7 +213,7 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
                   <td className="py-4">{repoCatObj[ele.report_category]}</td>
                   <td className="py-4">{ele.report_description}</td>
                   <td className="py-4">{ele.contact_number}</td>
-                  <td className="py-4">{ele.email_client}</td>
+                  {veiw && <td className="py-4">{ele.email_client}</td>}
                   <td className="py-4">{ele.date_add}</td>
                   <td className="py-4">{repoStatusObj[ele.report_status]}</td>
                   <td className="py-4">{ele?.reporting_party || "مطلوب"}</td>

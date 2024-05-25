@@ -42,19 +42,18 @@ const EditModel = ({ setEditModel, data, veiw }) => {
       report_status: reportStatus,
       reporting_party: reportingParty,
     };
-    console.log(updatedData);
+
     sendData(
       "https://eye-almashaeir.com/backend/update/reporter.php?api=311958357932035780279254406072",
       updatedData
     ).then((e) => {
-      console.log(e);
       e.request === "successfully" && toast.info("تم التعديل");
       setEditModel(false);
     });
   };
 
   return (
-    <div className="fixed overflow-auto top-0 left-0 h-full w-screen bg-black bg-opacity-40 z-[2000] flex justify-center items-start">
+    <div className="fixed overflow-auto top-0 left-0 h-full w-screen bg-[#ccc] p-8 z-[2000] flex justify-center items-start">
       <div className=" relative  w-[500px] bg-white rounded-md p-7">
         <img
           onClick={() => setEditModel(false)}
@@ -63,39 +62,42 @@ const EditModel = ({ setEditModel, data, veiw }) => {
           alt=""
         />
         <div className="w-full h-[300px] mt-6">
-          <DashboardMap location={[convertToNormalObject(data.location_map)]} />
+          <DashboardMap
+            location={[convertToNormalObject(data.location_map)]}
+            mapZoom="18"
+          />
         </div>
         <div>
           {data.file_type === "1" ? (
             <img
               className="w-full"
-              src={`https://eye-almashaeir.com/backend/${data.file_link}`}
+              src={`https://eye-almashaeir.com/backend/${data.file_link}` || ""}
               alt=""
             />
           ) : data.file_type === "2" ? (
             <video
               className="w-full"
-              src={`https://eye-almashaeir.com/backend/${data.file_link}`}
+              src={`https://eye-almashaeir.com/backend/${data.file_link}` || ""}
               controls
             ></video>
           ) : (
-            <audio
-              className="w-full"
-              src={`https://eye-almashaeir.com/backend/${data.file_link}`}
+            <video
+              className="w-full max-h-[70px]"
+              src={`https://eye-almashaeir.com/backend/${data.file_link}` || ""}
               controls
-            ></audio>
+            ></video>
           )}
         </div>
         <form action="" onSubmit={submitHandler} className="space-y-3">
           <div className="w-full">
             <label className="block" htmlFor="registration_number">
-              اسم المراقب :
+              {data.type_report === "1" ? "اسم المراقب:" : "اسم مقدم البلاغ:"}
             </label>
             <input
               className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
               // onChange={(e) => setUserName(e.target.value)}
               // // eslint-disable-next-line react/prop-types
-              value={data.user_name}
+              value={data.user_name || ""}
               type="text"
               required
               disabled
@@ -103,7 +105,9 @@ const EditModel = ({ setEditModel, data, veiw }) => {
           </div>
           <div className="w-full">
             <label className="block" htmlFor="registration_number">
-              الادارة التابع لها :
+              {data.type_report === "1"
+                ? "الإدارة التابع لها:"
+                : "مكتب تقديم الخدمة:"}
             </label>
             <input
               className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
@@ -112,7 +116,7 @@ const EditModel = ({ setEditModel, data, veiw }) => {
               disabled
               // onChange={(e) => setUserManagement(e.target.value)}
               // eslint-disable-next-line react/prop-types
-              value={data.user_management}
+              value={data.user_management || ""}
             />
           </div>
           <div className="w-full">
@@ -126,7 +130,7 @@ const EditModel = ({ setEditModel, data, veiw }) => {
               disabled
               // onChange={(e) => setRegistrationNumber(e.target.value)}
               // eslint-disable-next-line react/prop-types
-              value={data.registration_number}
+              value={data.registration_number || ""}
             />
           </div>
           <div className="w-full">
@@ -158,39 +162,42 @@ const EditModel = ({ setEditModel, data, veiw }) => {
               disabled
               // onChange={(e) => setContactNumber(e.target.value)}
               // eslint-disable-next-line react/prop-types
-              value={data.contact_number}
+              value={data.contact_number || ""}
             />
           </div>
+
+          {veiw && (
+            <div className="w-full">
+              <label className="block" htmlFor="registration_number">
+                البريد الإلكتروني لمقدم البلاغ:
+              </label>
+              <input
+                className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
+                type="text"
+                required
+                disabled
+                // onChange={(e) => setContactNumber(e.target.value)}
+                // eslint-disable-next-line react/prop-types
+                value={data.email_client || ""}
+              />
+            </div>
+          )}
           <div className="w-full">
             <label className="block" htmlFor="registration_number">
-              بريد مقدم البلاغ :
+              تاريخ استلام البلاغ:
             </label>
             <input
               className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
               type="text"
-              required
               disabled
               // onChange={(e) => setContactNumber(e.target.value)}
               // eslint-disable-next-line react/prop-types
-              value={data.email_client}
-            />
-          </div>
-          <div className="w-full">
-            <label className="block" htmlFor="registration_number">
-              تاريخ استلام البلاغ :
-            </label>
-            <input
-              className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
-              type="text"
-              disabled
-              // onChange={(e) => setContactNumber(e.target.value)}
-              // eslint-disable-next-line react/prop-types
-              value={data.date_add}
+              value={data.date_add || ""}
             />
           </div>
           <div className="w-full">
             <label htmlFor="inputFilter" className="block">
-              حالة البلاغ
+              حالة البلاغ:
             </label>
             <select
               // eslint-disable-next-line react/prop-types
@@ -208,7 +215,7 @@ const EditModel = ({ setEditModel, data, veiw }) => {
           </div>
           <div className="w-full">
             <label className="block" htmlFor="registration_number">
-              الجهة المعينة بمباشرة البلاغ :
+              الجهة المعينة بمباشرة البلاغ:
             </label>
             {veiw ? (
               <textarea
@@ -217,7 +224,7 @@ const EditModel = ({ setEditModel, data, veiw }) => {
                 type="text"
                 onChange={(e) => setReportingParty(e.target.value)}
                 // eslint-disable-next-line react/prop-types
-                value={reportingParty}
+                value={reportingParty || ""}
                 placeholder="مطلوب"
               />
             ) : (

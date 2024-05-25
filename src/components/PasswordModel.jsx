@@ -36,9 +36,9 @@ const PasswordModel = ({ setPasswordModel }) => {
         toast.error("حدث حطأ");
       });
   };
-  console.log(Cookies.get("email_client"));
+
   return (
-    <div className="fixed overflow-auto top-0 left-0 h-full w-screen bg-black bg-opacity-40 z-[2000] flex justify-center items-start">
+    <div className="fixed overflow-auto top-0 left-0 h-full w-screen bg-[#ccc] z-[2000] flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="relative  w-[500px] bg-white rounded-md p-7 flex flex-col gap-3"
@@ -51,24 +51,27 @@ const PasswordModel = ({ setPasswordModel }) => {
         />
         <div className="w-full">
           <label className="block" htmlFor="email_client">
-            ادخل الايميل الجديد
+            ادخال البريد الإلكتروني الجديد
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="email"
-            {...register("email_client", { required: true })}
-            placeholder={Cookies.get("email_client") || "بريد جديد"}
+            {...register("email_client")}
+            placeholder={
+              Cookies.get("email_client") || "ادخال البريد الإلكتروني الجديد"
+            }
           />
           {errors.email_client && <span className="text-red-500">مطلوب</span>}
         </div>
         <div className="w-full">
           <label className="block" htmlFor="password_client">
-            ادخل كلمة السر الجديد
+            ادخل كلمة المرور الجديد
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
             type="password"
-            {...register("password_client", { required: true })}
+            placeholder="ادخل كلمة المرور الجديد"
+            {...register("password_client")}
           />
           {errors.password_client && (
             <span className="text-red-500">مطلوب</span>

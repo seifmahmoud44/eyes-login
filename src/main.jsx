@@ -13,7 +13,11 @@ import RouteProvider from "./components/RouteProvider.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: (
+      <RouteProvider>
+        <Login />
+      </RouteProvider>
+    ),
     errorElement: <NotFound />,
   },
   {

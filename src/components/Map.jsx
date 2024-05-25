@@ -3,6 +3,9 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import iconUrl from "../assets/pin.png"; // Import your custom pin image
 import ChooseTypeModel from "./ChooseTypeModel";
+import { IoIosLogOut } from "react-icons/io";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const MapComponent = ({ setLocation, location }) => {
@@ -10,7 +13,8 @@ const MapComponent = ({ setLocation, location }) => {
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
   const [position, setPosition] = useState(location); // Default position
-  const [showMarker, setShowMarker] = useState(false); // State to control marker visibility
+  const [showMarker, setShowMarker] = useState(true); // State to control marker visibility
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -80,7 +84,7 @@ const MapComponent = ({ setLocation, location }) => {
 
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
-      mapInstanceRef.current.setView([position.lat, position.lng], 13);
+      mapInstanceRef.current.setView([position.lat, position.lng]);
       if (showMarker) {
         markerRef.current
           .setLatLng([position.lat, position.lng])
@@ -110,10 +114,21 @@ const MapComponent = ({ setLocation, location }) => {
         <button
           disabled={!showMarker}
           onClick={() => setShowModel(true)}
-          className="disabled:bg-black disabled:bg-opacity-70 font-bold text-2xl  max-w-full px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
+          className="cursor-pointer disabled:bg-black disabled:bg-opacity-30 font-bold text-2xl  max-w-full px-6 py-3 bg-[#1A6537] text-white rounded z-[1001] "
         >
           تأكيد الموقع
         </button>
+
+        {Cookies.get("user_client") !== undefined && (
+          <IoIosLogOut
+            onClick={() => {
+              Cookies.remove("user_client");
+              Cookies.remove("email_client");
+              navigate("/", { replace: true });
+            }}
+            className="mr-3 font-bold text-4xl p-2 bg-[#1A6537] text-white rounded cursor-pointer"
+          />
+        )}
       </div>
     </div>
   );

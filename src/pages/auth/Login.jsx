@@ -11,11 +11,10 @@ import { gsap } from "gsap";
 import Intro from "../../components/Intro";
 
 const Login = () => {
-  const { response, loading, error, sendData } = useAxiosLogin();
+  const { loading, sendData } = useAxiosLogin();
   const [isVerification, setVerification] = useState(true);
   const [registration, setregistration] = useState(false);
   const [clearIntro, setClearIntro] = useState(false);
-
   const navigate = useNavigate();
 
   const {
@@ -35,11 +34,63 @@ const Login = () => {
     const finalData = {
       ...data,
     };
-    console.log(finalData);
     sendData(
       "https://eye-almashaeir.com/backend/read/login_client.php?api=311958357932035780279254406072",
       finalData
-    );
+    )
+      .then((e) => {
+        if (e.request === "successfully") {
+          Cookies.remove("new_user");
+          Cookies.remove("verification_email");
+          Cookies.set("user_client", JSON.stringify(e.message), {
+            expires: 1,
+          });
+
+          Cookies.set("email_client", data.email_client);
+
+          if (e.message.powers_client === "1") {
+            navigate("/dashboard", { replace: true });
+          } else {
+            navigate("/login", { replace: true });
+          }
+        } else if (e.request === "new_user") {
+          toast.success("تم إرسال رمز التحقق على البريد الإلكتروني");
+          setVerification(false);
+
+          Cookies.set("new_user", JSON.stringify(e.message), {
+            expires: 1,
+          });
+
+          console.log(e);
+        } else if (e.request === "email_verified") {
+          toast.warning(
+            "الحساب غير مفعل - تم إرسال رمز التحقق على البريد الإلكتروني"
+          );
+          setVerification(false);
+
+          Cookies.set("new_user", JSON.stringify(e.message), {
+            expires: 1,
+          });
+
+          console.log(e);
+        } else if (e.request === "error") {
+          if (e.message === "password_incorrect") {
+            toast.error("كلمة السر غير صحيحة");
+          } else if (e.message === "no_user") {
+            toast.warning("المستخدم غير مسجل");
+          } else {
+            toast.error("حدث خطأ");
+            console.log(e);
+          }
+        } else {
+          toast.error("حدث خطأ");
+          console.log(e);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("حدث خطأ");
+      });
   };
 
   const onSubmitVerificationEmail = async (data) => {
@@ -77,52 +128,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (response) {
-      if (response.request === "successfully") {
-        Cookies.remove("new_user");
-        Cookies.remove("verification_email");
-        Cookies.set("user_client", JSON.stringify(response.message), {
-          expires: 1,
-        });
-
-        if (response.message.powers_client === "1") {
-          navigate("/dashboard", { replace: true });
-        } else {
-          navigate("/login", { replace: true });
-        }
-      } else if (response.request === "new_user") {
-        toast.success("تم ارسال رمز التحقق على البريد");
-        setVerification(false);
-
-        Cookies.set("new_user", JSON.stringify(response.message), {
-          expires: 1,
-        });
-
-        console.log(response);
-      } else if (response.request === "email_verified") {
-        toast.warning("الحساب غير مفعل - تم ارسال رمز التحقق على البريد");
-        setVerification(false);
-
-        Cookies.set("new_user", JSON.stringify(response.message), {
-          expires: 1,
-        });
-
-        console.log(response);
-      } else if (response.request === "error") {
-        if (response.message === "password_incorrect") {
-          toast.error("كلمة السر غير صحيحة");
-        } else if (response.message === "no_user") {
-          toast.warning("المستخدم غير مسجل");
-        } else {
-          toast.error("حدث خطأ");
-          console.log(response);
-        }
-      } else {
-        toast.error("حدث خطأ");
-        console.log(response);
-      }
-    }
-
     const loadHandler = () => {
       gsap.to(".intro", {
         y: "-100%",
@@ -138,7 +143,7 @@ const Login = () => {
     return () => {
       window.removeEventListener("load", loadHandler);
     };
-  }, [response]);
+  }, []);
 
   return (
     <>
@@ -166,7 +171,7 @@ const Login = () => {
                   className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black text-center"
                   type="email"
                   {...register("email_client", { required: true })}
-                  placeholder="البريد الالكتروني"
+                  placeholder="البريد الإلكتروني"
                 />
                 {errors.email_client && (
                   <span className="text-red-500">مطلوب</span>

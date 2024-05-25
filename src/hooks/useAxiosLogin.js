@@ -6,7 +6,7 @@ const useAxiosLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const sendData = async (url, postData) => {
+  const sendData = (url, postData) => {
     setLoading(true);
     const formData = new FormData();
 
@@ -22,17 +22,22 @@ const useAxiosLogin = () => {
       }
     });
 
-    try {
-      const response = await axios.post(url, formData, {
+    return axios
+      .post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+      })
+      .then((response) => {
+        setResponse(response.data);
+        setLoading(false);
+        return response.data; // Return response data for further chaining
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+        throw error; // Rethrow error for further chaining
       });
-      setResponse(response.data);
-    } catch (error) {
-      setError(error.message);
-    }
-    setLoading(false);
   };
 
   return { response, loading, error, sendData };

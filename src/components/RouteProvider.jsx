@@ -1,16 +1,23 @@
 import Cookies from "js-cookie";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 const RouteProvider = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const useClient =
-    Cookies.get("user_client") !== undefined
-      ? JSON.parse(Cookies.get("user_client"))
-      : navigate("/");
+    Cookies.get("user_client") !== undefined &&
+    JSON.parse(Cookies.get("user_client"));
 
   useEffect(() => {
     if (useClient?.powers_client === "1") {
-      navigate("/dashboard", { replace: true });
+      if (
+        location.pathname !== "/dashboard" &&
+        location.pathname !== "/login"
+      ) {
+        navigate("/dashboard", { replace: true });
+      }
     } else if (useClient?.powers_client === "2") {
       navigate("/login", { replace: true });
     } else {

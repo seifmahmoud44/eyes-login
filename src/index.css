@@ -52,14 +52,6 @@
   }
 }
 
-.react-tel-input .react-phone-number-input__country-select {
-  /* Add your custom styles for the country code here */
-  background-color: #f1f1f1;
-  color: #333;
-  padding: 8px;
-  border-radius: 4px;
-}
-
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -101,4 +93,18 @@ table input {
   height: 20px;
   background: #fff;
   z-index: 1999;
+}
+
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #111;
+  border-radius: 20px;
 }

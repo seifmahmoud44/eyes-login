@@ -10,7 +10,6 @@ import useAxiosPost from "../hooks/useAxiosPost";
 import { BeatLoader } from "react-spinners";
 import Cookies from "js-cookie";
 import backImg from "../assets/back-arrow.png";
-import "react-phone-input-2/lib/style.css";
 import AudioRecorder from "./AudioRecorder";
 
 const Form = () => {
@@ -33,7 +32,7 @@ const Form = () => {
 
   const onSubmit = (data) => {
     if (!uploadFile) {
-      toast.error("يجب رفع فيديو او صورة");
+      toast.error("يجب رفع فيديو او صورة او تسجيل صوت");
       return;
     }
     const finalData = {
@@ -105,7 +104,7 @@ const Form = () => {
 
         <div className="w-full">
           <label className="block" htmlFor="user_name">
-            {type === "1" ? "اسم المراقب:" : " اسم مقدم البلاغ:"}
+            {type === "1" ? "اسم المراقب:" : "اسم مقدم البلاغ:"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
@@ -117,7 +116,7 @@ const Form = () => {
 
         <div className="w-full">
           <label className="block" htmlFor="user_management">
-            {type === "1" ? "الادارة التابع لها:" : "مكتب تقديم الخدمة :"}
+            {type === "1" ? "الادارة التابع لها:" : "مكتب تقديم الخدمة:"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"
