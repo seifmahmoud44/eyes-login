@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import closeImg from "../assets/close-black.png";
 
 import useAxiosUpdate from "../hooks/useAxiosUpdate";
@@ -81,11 +81,11 @@ const EditModel = ({ setEditModel, data, veiw }) => {
               controls
             ></video>
           ) : (
-            <video
-              className="w-full max-h-[70px]"
+            <audio
+              className="w-full"
               src={`https://eye-almashaeir.com/backend/${data.file_link}` || ""}
               controls
-            ></video>
+            ></audio>
           )}
         </div>
         <form action="" onSubmit={submitHandler} className="space-y-3">

@@ -116,7 +116,7 @@ const Form = () => {
 
         <div className="w-full">
           <label className="block" htmlFor="user_management">
-            {type === "1" ? "الادارة التابع لها:" : "مكتب تقديم الخدمة:"}
+            {type === "1" ? "الإدارة التابع لها:" : "مكتب تقديم الخدمة:"}
           </label>
           <input
             className="w-full border focus-visible:outline-none py-2 px-4 rounded focus:border-black"

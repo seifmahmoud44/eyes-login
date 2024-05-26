@@ -13,8 +13,9 @@ const MapComponent = ({ setLocation, location }) => {
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
   const [position, setPosition] = useState(location); // Default position
-  const [showMarker, setShowMarker] = useState(true); // State to control marker visibility
+  const [showMarker, setShowMarker] = useState(false); // State to control marker visibility
   const navigate = useNavigate();
+  const [zoomProps, setZoom] = useState(13);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -24,9 +25,12 @@ const MapComponent = ({ setLocation, location }) => {
             lat: position.coords.latitude || 21.373802072095938,
             lng: position.coords.longitude || 39.944572448730476,
           });
+          setShowMarker(true);
+          setZoom(18);
         },
         (error) => {
           console.error("Error getting location: ", error);
+          setShowMarker(false);
         },
         {
           enableHighAccuracy: true,
@@ -42,7 +46,7 @@ const MapComponent = ({ setLocation, location }) => {
 
     mapInstanceRef.current = L.map(mapRef.current).setView(
       [position.lat, position.lng],
-      13
+      zoomProps
     );
 
     // Satellite tile layer
@@ -80,7 +84,7 @@ const MapComponent = ({ setLocation, location }) => {
       mapInstanceRef.current.remove();
       mapInstanceRef.current = null;
     };
-  }, []);
+  }, [zoomProps]);
 
   useEffect(() => {
     if (mapInstanceRef.current && markerRef.current) {
