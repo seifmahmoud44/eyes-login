@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { FaMicrophone, FaStop } from "react-icons/fa";
+
 import micImg from "../assets/mic.png";
 const AudioRecorder = ({ onStop, setRecording }) => {
   const [isRecording, setIsRecording] = useState(false);

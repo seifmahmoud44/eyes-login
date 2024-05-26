@@ -83,18 +83,11 @@ const EditModel = ({ setEditModel, data, veiw }) => {
               controls
             ></video>
           ) : (
-            <AudioPlayer
-              autoPlay
-              src={`https://eye-almashaeir.com/backend/${data.file_link}`}
-              onPlay={(e) => console.log("onPlay")}
-              // other props here
-            />
-
-            // <audio
-            //   className="w-full"
-            //   src={`https://eye-almashaeir.com/backend/${data.file_link}`}
-            //   controls
-            // ></audio>
+            <video
+              className="w-full max-h-[70px]"
+              src={`https://eye-almashaeir.com/backend/${data.file_link}` || ""}
+              controls
+            ></video>
           )}
         </div>
         <form action="" onSubmit={submitHandler} className="space-y-3">
