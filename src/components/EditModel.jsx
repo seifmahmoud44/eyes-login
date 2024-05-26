@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import closeImg from "../assets/close-black.png";
 
+import { useState } from "react";
+import closeImg from "../assets/close-black.png";
+import AudioPlayer from "react-h5-audio-player";
 import useAxiosUpdate from "../hooks/useAxiosUpdate";
 import DashboardMap from "./DashboardMap";
 import { convertToNormalObject } from "../utility/objCnverter";
 import { toast } from "sonner";
+import "react-h5-audio-player/lib/styles.css";
 // eslint-disable-next-line react/prop-types
 const EditModel = ({ setEditModel, data, veiw }) => {
   //   const [contactNumber, setContactNumber] = useState(data.contact_number);
@@ -81,11 +83,18 @@ const EditModel = ({ setEditModel, data, veiw }) => {
               controls
             ></video>
           ) : (
-            <video
-              className="w-full max-h-[70px]"
-              src={`https://eye-almashaeir.com/backend/${data.file_link}` || ""}
-              controls
-            ></video>
+            <AudioPlayer
+              autoPlay
+              src={`https://eye-almashaeir.com/backend/${data.file_link}`}
+              onPlay={(e) => console.log("onPlay")}
+              // other props here
+            />
+
+            // <audio
+            //   className="w-full"
+            //   src={`https://eye-almashaeir.com/backend/${data.file_link}`}
+            //   controls
+            // ></audio>
           )}
         </div>
         <form action="" onSubmit={submitHandler} className="space-y-3">

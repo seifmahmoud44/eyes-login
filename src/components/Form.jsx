@@ -42,7 +42,7 @@ const Form = () => {
       location_map: state.position,
       email_client: Cookies.get("email_client") || "",
     };
-
+    console.log(finalData);
     sendData(
       "https://eye-almashaeir.com/backend/create/reporter.php?api=311958357932035780279254406072",
       finalData
