@@ -36,7 +36,7 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
     4: "تم حل البلاغ",
   };
 
-  const { data, fetchData } = useAxiosGet();
+  const { data, fetchData, erorr } = useAxiosGet();
   const { deleteData } = useAxiosDelete();
 
   useEffect(() => {
@@ -75,6 +75,7 @@ const DashTable = ({ setLocation, setStats, veiw }) => {
           veiw={veiw}
         />
       )}
+      <h1>{erorr}</h1>
       <div className="relative m-[2px] my-3 mx-3 flex justify-start items-center gap-3">
         <label htmlFor="inputFilter" className="whitespace-nowrap">
           نوع البلاغ:
